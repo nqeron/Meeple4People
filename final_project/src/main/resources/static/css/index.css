@@ -1,0 +1,32 @@
+@charset "ISO-8859-1";
+
+.pageTitle{
+	font-size:50px;
+	text-align:center;
+}
+
+.gameGrid{
+    text-align: center;
+    width:50%;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.gameGrid .game_image{
+  height:140px;
+  width: 220px;
+  border:solid;
+}
+
+.gameGrid td{
+    height: 150px;
+    width: 200px;
+    padding: 5px;
+    border-bottom: 50px solid #fff;
+    display: inline-table;
+    margin: 5px;
+}
+
+.nextGames{
+	float:right;
+}

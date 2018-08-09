@@ -346,6 +346,10 @@ public class CustomerDAO {
 	}
 
 
+	/**
+	 * @param customer with data to register
+	 * @return id of customer registered
+	 */
 	public int registerUser(Customer customer) {
 		Connection conn = null;
 		try {

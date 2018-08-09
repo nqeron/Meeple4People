@@ -11,6 +11,15 @@ public class Zipcode {
 		super();
 	}
 
+	
+	public Zipcode(int zipcode, String city, String state, String country) {
+		super();
+		this.zipcode = zipcode;
+		this.city = city;
+		this.state = state;
+		this.country = country;
+	}
+
 	/**
 	 * @return the zipcode
 	 */

@@ -73,7 +73,7 @@
 	    </div>
 	    <label for="state" class="col-sm-2 col-form-label">State</label>
 	    <div class="col-sm-3">
-	      <input type="text" class="form-control-static" id="state" name="state" value="${zipcode.getState()}">
+	      <input type="text" class="form-control" id="state" name="state" value="${zipcode.getState()}" readonly>
 	    </div>
 	  </div>
 	  <div class="form-group row">
@@ -93,7 +93,7 @@
 	    </div>
 	    <label for="country" class="col-sm-2 col-form-label">Country</label>
 	    <div class="col-sm-3">
-	      <input type="text" class="form-control-static" id="country" name="country" value="${zipcode.getCountry()}">
+	      <input type="text" class="form-control" id="country" name="country" value="${zipcode.getCountry()}" readonly>
 	    </div>
 	  </div>
 	  <div class="form-group row">

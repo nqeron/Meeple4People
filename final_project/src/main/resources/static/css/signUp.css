@@ -1,0 +1,14 @@
+@charset "ISO-8859-1";
+
+.pageTitle{
+	font-size:50px;
+	text-align:center;
+}
+
+.registrationForm{
+	margin-left:35%;
+}
+
+.registerButton{
+	margin-left:30%;
+}

@@ -1,0 +1,14 @@
+@charset "ISO-8859-1";
+
+.pageTitle{
+	font-size:50px;
+	text-align:center;
+}
+
+.loginForm{
+	margin-left:35%;
+}
+
+.loginButton{
+	margin-left:30%;
+}

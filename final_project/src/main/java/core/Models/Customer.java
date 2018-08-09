@@ -1,6 +1,7 @@
 package core.Models;
 
 import java.sql.Date;
+import java.text.DecimalFormat;
 
 public class Customer {
 
@@ -14,7 +15,7 @@ public class Customer {
 	private String address_line_1;
 	private String address_line_2;
 	private int zipcode;
-	private int phone;
+	private long phone;
 	private String member_status;
 	private Date join_date;
 	private double balance;
@@ -145,6 +146,11 @@ public class Customer {
 	public int getZipcode() {
 		return zipcode;
 	}
+	
+	public String getZipcodeText() {
+		DecimalFormat format = new DecimalFormat("00000");
+		return format.format(zipcode);
+	}
 
 	/**
 	 * @param zipcode the zipcode to set
@@ -156,14 +162,14 @@ public class Customer {
 	/**
 	 * @return the phone
 	 */
-	public int getPhone() {
+	public long getPhone() {
 		return phone;
 	}
 
 	/**
 	 * @param phone the phone to set
 	 */
-	public void setPhone(int phone) {
+	public void setPhone(long phone) {
 		this.phone = phone;
 	}
 
@@ -280,6 +286,18 @@ public class Customer {
 		if (zipcode != other.zipcode)
 			return false;
 		return true;
+	}
+
+
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Customer [id=" + id + ", last_name=" + last_name + ", first_name=" + first_name + ", username="
+				+ username + ", e_mail=" + e_mail + ", address_line_1=" + address_line_1 + ", address_line_2="
+				+ address_line_2 + ", zipcode=" + zipcode + ", phone=" + phone + ", balance=" + balance + "]";
 	}
 	
 	

@@ -18,7 +18,7 @@
     </button>
   
       <div class="dropdown-content">
-        <a href="#">Home</a>
+        <a href="/">Home</a>
         <a href="#">Shopping Cart</a>
      	<a href="#">About</a>
      	<a href="#">FAQ</a>
@@ -33,8 +33,16 @@
     
     <button class = "dropbtn"><!--<i class="fas fa-user-circle fa-5x"></i>--> <img style="height:45px" src = "https://png.icons8.com/cotton/40/000000/gender-neutral-user.png" /></button>
     <div class="dropdown-content">
-      <a href="#"> Login </a>
-      <a href="#"> Sign Up </a>
+    <c:choose>
+    	<c:when test="${customer != null}">
+    		<a href="#"> User Profile</a>
+    		<a href="#"> Logout</a>
+    	</c:when>
+    	<c:otherwise>
+    		<a href="#"> Login </a>
+      		<a href="#"> Sign Up </a>
+    	</c:otherwise>
+    </c:choose>
     </div>
    </div>
   <div class = "shoppingCart"><!--<i class="fas fa-shopping-cart fa-5x"></i>--> <img style="height:45px" src="https://png.icons8.com/ios/40/000000/shopping-cart-filled.png" /></div>

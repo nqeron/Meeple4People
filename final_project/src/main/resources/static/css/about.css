@@ -1,0 +1,14 @@
+@charset "ISO-8859-1";
+
+.pageTitle{
+	font-size: 50px;
+	text-align: center;
+}
+
+.aboutText{
+	font-size: 18px;
+	width: 75%;
+    margin: 0 auto;
+    line-height: 2.0;
+    text-align: justify;
+}

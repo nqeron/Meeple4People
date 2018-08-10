@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>noahfields</groupId>
   <artifactId>final_project</artifactId>
-  <version>0.0.3-SNAPSHOT</version>
+  <version>0.0.5-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>Meeple4People</name>
   

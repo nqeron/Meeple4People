@@ -16,14 +16,13 @@
     <button class="dropbtn"> <img style="height:45px" src="https://png.icons8.com/color/180/drag-list-down.png">
       <!--<i class="fas fa-bars fa-5x"></i>-->
     </button>
-  
       <div class="dropdown-content">
         <a href="/">Home</a>
-        <a href="#">Shopping Cart</a>
-     	<a href="#">About</a>
-     	<a href="#">FAQ</a>
-     	<a href="#">Browse Games</a>
-     	<a href="#">Rentals</a>
+        <a href="/shoppingCart">Shopping Cart</a>
+     	<a href="/about">About</a>
+     	<a href="/faq">FAQ</a>
+     	<a href="/browseGames">Browse Games</a>
+     	<a href="/rentals">Rentals</a>
       </div>
     </div> 
   <div class = "searchBar"><div class="form-group">
@@ -35,12 +34,12 @@
     <div class="dropdown-content">
     <c:choose>
     	<c:when test="${customer != null}">
-    		<a href="#"> User Profile</a>
-    		<a href="#"> Logout</a>
+    		<a href="/userProfile"> User Profile</a>
+    		<a href="/logout"> Logout</a>
     	</c:when>
     	<c:otherwise>
-    		<a href="#"> Login </a>
-      		<a href="#"> Sign Up </a>
+    		<a href="/login"> Login </a>
+      		<a href="/register"> Sign Up </a>
     	</c:otherwise>
     </c:choose>
     </div>

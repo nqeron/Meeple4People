@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import core.DAO.CustomerDAO;
 import core.DAO.ZipcodeDAO;
@@ -90,6 +92,14 @@ public class CustomerController {
 	@GetMapping("/login")
 	public String goToLoginPage() {
 		return "login";
+	}
+	
+	@GetMapping("/logout")
+	public RedirectView logout(ModelAndView m, HttpServletRequest request) {
+		//ModelAndView m = new ModelAndView();
+		
+		request.getSession().setAttribute("customer", null);
+		return new RedirectView(request.getHeader("Referer"));
 	}
 	
 	@PostMapping("/loginAction")

@@ -16,7 +16,14 @@ public class MechanicDAO {
 
 	private static final String GETMECHANICSBYNAMEBASE = "SELECT * FROM Mechanics WHERE name in ";
 	private static final String GETMECHANICSBYGAMEID = "SELECT mech.id, mech.Name, mech.Description FROM Mechanics mech join Game_Mechanics gm on mech.id = gm.Mechanic_ID WHERE gm.Game_ID = ?";
+	private static final String GETMECHANICBYID = "SELECT * FROM Mechanics WHERE id = ?";
 	
+	
+	/**
+	 * Queries the database for mechanics for the associated names given
+	 * @param mechanicNames: names of mechanics to search for
+	 * @return mechanics for given names
+	 */
 	public List<Mechanic> getMechanicsByName(String[] mechanicNames) {
 		String SQL = GETMECHANICSBYNAMEBASE;
 		
@@ -72,6 +79,11 @@ public class MechanicDAO {
 		return mechanics;
 	}
 
+	/**
+	 * Queries the database for mechanics for a particular game
+	 * @param game: game to get the mechanics for
+	 * @return list of mechanics for the given game
+	 */
 	public List<Mechanic> getMechanicsForGame(Game game){
 		//gets the mechanics for a specified game
 		
@@ -114,5 +126,51 @@ public class MechanicDAO {
 			e.printStackTrace();
 		}
 		return mechanics;
+	}
+
+	/**
+	 * Queries the database for a particular mechanic
+	 * @param id: id of mechanic to get
+	 * @return mechanic for given id
+	 */
+	public Mechanic getMechanicByID(int id) {
+		Connection conn = null;
+		try {
+			conn = new OracleConnection().getConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(conn == null) {
+			return null;
+		}
+		
+		Mechanic mechanic = null;
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(GETMECHANICBYID);
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				mechanic = new Mechanic();
+				mechanic.setId(rs.getInt(1));
+				mechanic.setName(rs.getString(2));
+				mechanic.setDescription(rs.getString(3));
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return mechanic;
 	}
 }

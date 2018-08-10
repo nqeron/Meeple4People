@@ -1,0 +1,11 @@
+@charset "ISO-8859-1";
+
+.pageTitle{
+	font-size: 50px;
+	text-align: center;
+}
+
+.description{
+	font-size: 35px;
+	text-align: center;
+}

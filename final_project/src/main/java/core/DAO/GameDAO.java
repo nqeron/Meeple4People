@@ -16,6 +16,7 @@ import core.Models.Mechanic;
 public class GameDAO {
 
 	private static final String GETTOPRATEDGAMES = "Select * From topRated Where R BETWEEN ? AND ?";
+	private static final String GETGAMEBYID = "SELECT * FROM Games Where id = ?";
 	
 	public List<Game> searchForGames(String name, int[] years, double lowCost, double highCost, double lowRating, double highRating, List<Designer> designers, List<Mechanic> mechanics ){
 		
@@ -218,5 +219,50 @@ public class GameDAO {
 		}
 		
 		return games;
+	}
+
+
+
+	public Game getGameByID(int id) {
+		Connection conn = null;
+		try {
+			conn = new OracleConnection().getConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(conn == null) {
+			return null;
+		}
+		
+		Game game = null;
+		try {
+			PreparedStatement ps = conn.prepareStatement(GETGAMEBYID);
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				game = new Game();
+				game.setId(rs.getInt(1));
+				game.setName(rs.getString(2));
+				game.setDescription(rs.getString(3));
+				game.setYear_published(rs.getInt(4));
+				game.setCost_of_game(rs.getDouble(5));
+				game.setAverage_Rating(rs.getDouble(6));
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return game;
 	}
 }

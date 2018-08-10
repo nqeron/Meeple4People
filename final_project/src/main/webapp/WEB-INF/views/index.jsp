@@ -60,9 +60,11 @@
 					<%} %>
 					<td>
 						<div id = "game_<%=i %>" class = "game_box">
-							<div class = "game_image">
-								<image src="" alt="image will go here"/>
-							</div>
+							<a class="gameLink" href="games/${game.getId()}">
+								<div class = "game_image">
+									<image src="" alt="image will go here"/>
+								</div>
+							</a>
 							<div class = "game_name">
 								${game.getName()}			
 							</div>

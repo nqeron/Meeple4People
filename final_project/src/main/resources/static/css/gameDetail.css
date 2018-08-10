@@ -1,0 +1,56 @@
+@charset "ISO-8859-1";
+
+.pageTitle{
+	font-size: 50px;
+	text-align: center;
+}
+
+.mechanicsBox{
+	float: right;
+	width: 10%;
+	margin-right: 5%;
+}
+
+.leftSide{
+	width: 65%;
+	margin: 0 auto;
+}
+
+.description{
+	width: 50%;
+	float: left;
+	margin-left: 240px;
+	margin-right: 35px;
+}
+
+.designers{
+	float: left;
+}
+
+.publishers{
+	float: left;
+}
+
+.picAndRating{
+	width: 220px;
+	margin-bottom: 15px;
+	text-align: center;
+}
+
+.picture{
+	height: 180px;
+	border: solid;
+	margin: 0px;
+	position: relative;
+}
+
+.gamePic{
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.yearPublished{
+	text-align: center;
+	width: 220px;
+}

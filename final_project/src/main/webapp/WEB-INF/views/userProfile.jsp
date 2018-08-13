@@ -82,7 +82,20 @@
 	    </div>
 	    <label for="zipcode" class="col-sm-2 col-form-label">Zipcode</label>
 	    <div class="col-sm-3">
-	      <input type="text" class="form-control" id="zipcode" name="zipcode" value="${customer.getZipcodeText()}">
+	    	<select class="custom-select" id="zipcode" name="zipcode">
+	    		<c:forEach var = "zip" items="${allZips}">
+	    			<c:choose>
+	    				<c:when test="${zip.getZipcode() == customer.getZipcode()}">
+	    					<option value="${zip.getZipcode()}" selected> ${zip.getZipcode()}</option>	
+	    				</c:when>
+	    				<c:otherwise>
+	    					<option value="${zip.getZipcode()}"> ${zip.getZipcode()}</option>	
+	    				</c:otherwise>
+	    			</c:choose>
+	    			
+	    		</c:forEach>
+	    	</select>
+	      <!-- <input type="text" class="form-control" id="zipcode" name="zipcode" value="${customer.getZipcodeText()}"> -->
 	    </div>
 	  </div>
 	  <div class="form-group row">
@@ -98,7 +111,7 @@
 	  <div class="form-group row">
 	    <label for="phone" class="col-sm-2 col-form-label">Phone</label>
 	    <div class="col-sm-3">
-	      <input type="text" class="form-control" id="phone" name="phone" value="${customer.getPhone()}">
+	      <input type="tel" class="form-control" id="phone" name="phone" value="${customer.getPhone()}">
 	    </div>
 	    <label for="email" class="col-sm-2 col-form-label">Email</label>
 	    <div class="col-sm-3">

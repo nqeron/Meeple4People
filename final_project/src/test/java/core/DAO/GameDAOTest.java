@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import core.Models.Game;
+import com.noahfields.DAO.GameDAO;
+import com.noahfields.Models.Game;
 
 class GameDAOTest {
 

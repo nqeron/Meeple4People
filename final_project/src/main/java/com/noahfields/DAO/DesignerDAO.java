@@ -1,4 +1,4 @@
-package core.DAO;
+package com.noahfields.DAO;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -9,9 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
-import core.Models.Designer;
-import core.Models.Game;
+import org.springframework.stereotype.Repository;
 
+import com.noahfields.Models.Designer;
+import com.noahfields.Models.Game;
+
+@Repository
 public class DesignerDAO {
 
 	private static final String GETDESIGNERSFORGAME = "SELECT des.id, des.First_name, des.Last_name, des.Website FROM Designers des join Game_Designers gd on des.id = gd.Designer_ID WHERE gd.Game_ID = ?";

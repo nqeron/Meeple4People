@@ -1,4 +1,4 @@
-package core.DAO;
+package com.noahfields.DAO;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -8,8 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import core.Models.Comment;
+import org.springframework.stereotype.Repository;
 
+import com.noahfields.Models.Comment;
+
+@Repository
 public class CommentDAO {
 	
 	private static final String GETTOPCOMMENTSFORGAME = "SELECT Game_ID, Customer_ID, Comment_Text, Rating, Comment_Date, ROW_NUMBER() OVER (order by Rating DESC) R FROM Game_Comments WHERE Game_ID = ?";

@@ -1,4 +1,4 @@
-package web;
+package com.noahfields;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,7 +7,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan("web")
+@ComponentScan("com.noahfields")
 public class SpringMain { //extends SpringBootServletInitializer {
 
 //	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {

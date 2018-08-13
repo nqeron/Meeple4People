@@ -1,4 +1,4 @@
-package core.DAO;
+package com.noahfields.DAO;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -9,10 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
-import core.Models.Designer;
-import core.Models.Game;
-import core.Models.Mechanic;
+import org.springframework.stereotype.Repository;
 
+import com.noahfields.Models.Designer;
+import com.noahfields.Models.Game;
+import com.noahfields.Models.Mechanic;
+
+@Repository
 public class GameDAO {
 
 	private static final String GETTOPRATEDGAMES = "Select * From topRated Where R BETWEEN ? AND ?";

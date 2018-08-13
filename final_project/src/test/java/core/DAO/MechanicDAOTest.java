@@ -13,8 +13,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import core.Models.Game;
-import core.Models.Mechanic;
+import com.noahfields.DAO.MechanicDAO;
+import com.noahfields.Models.Game;
+import com.noahfields.Models.Mechanic;
 
 /**
  * @author Students
@@ -40,7 +41,7 @@ class MechanicDAOTest {
 	}
 
 	/**
-	 * Test method for {@link core.DAO.MechanicDAO#getMechanicsByName(java.lang.String[])}.
+	 * Test method for {@link com.noahfields.DAO.MechanicDAO#getMechanicsByName(java.lang.String[])}.
 	 */
 	@Test
 	void testGetMechanicsByName() {
@@ -53,7 +54,7 @@ class MechanicDAOTest {
 	}
 
 	/**
-	 * Test method for {@link core.DAO.MechanicDAO#getMechanicsForGame(core.Models.Game)}.
+	 * Test method for {@link com.noahfields.DAO.MechanicDAO#getMechanicsForGame(com.noahfields.Models.Game)}.
 	 */
 	@Test
 	void testGetMechanicsForGame() {

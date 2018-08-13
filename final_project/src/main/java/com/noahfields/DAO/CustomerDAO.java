@@ -1,4 +1,4 @@
-package core.DAO;
+package com.noahfields.DAO;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -9,10 +9,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import core.Encryption.Encryption;
-import core.Models.Customer;
-import core.Models.Designer;
+import org.springframework.stereotype.Repository;
 
+import com.noahfields.Encryption.Encryption;
+import com.noahfields.Models.Customer;
+import com.noahfields.Models.Designer;
+
+@Repository
 public class CustomerDAO {
 
 	private static final String ADDCUSTOMER = "INSERT INTO Customers (Last_Name, First_name, Username, E_mail, Password, Salt, Address_Line_1, Address_Line_2, Zipcode, Phone, Member_Status, Join_Date, Balance) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";

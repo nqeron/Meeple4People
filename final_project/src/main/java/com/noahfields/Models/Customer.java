@@ -1,4 +1,4 @@
-package core.Models;
+package com.noahfields.Models;
 
 import java.sql.Date;
 import java.text.DecimalFormat;
@@ -297,8 +297,11 @@ public class Customer {
 	public String toString() {
 		return "Customer [id=" + id + ", last_name=" + last_name + ", first_name=" + first_name + ", username="
 				+ username + ", e_mail=" + e_mail + ", address_line_1=" + address_line_1 + ", address_line_2="
-				+ address_line_2 + ", zipcode=" + zipcode + ", phone=" + phone + ", balance=" + balance + "]";
+				+ address_line_2 + ", zipcode=" + zipcode + ", phone=" + phone + ", member_status=" + member_status
+				+ ", join_date=" + join_date + ", balance=" + balance + "]";
 	}
+	
+	
 	
 	
 	

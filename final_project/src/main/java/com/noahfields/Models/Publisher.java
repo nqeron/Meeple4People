@@ -1,4 +1,4 @@
-package core.Models;
+package com.noahfields.Models;
 
 public class Publisher {
 

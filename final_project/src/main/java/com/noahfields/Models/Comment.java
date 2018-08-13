@@ -1,4 +1,4 @@
-package core.Models;
+package com.noahfields.Models;
 
 import java.sql.Date;
 

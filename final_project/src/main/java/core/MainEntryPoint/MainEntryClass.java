@@ -6,13 +6,13 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-import core.DAO.DesignerDAO;
-import core.DAO.GameDAO;
-import core.DAO.MechanicDAO;
-import core.DAO.OracleConnection;
-import core.Models.Designer;
-import core.Models.Game;
-import core.Models.Mechanic;
+import com.noahfields.DAO.DesignerDAO;
+import com.noahfields.DAO.GameDAO;
+import com.noahfields.DAO.MechanicDAO;
+import com.noahfields.DAO.OracleConnection;
+import com.noahfields.Models.Designer;
+import com.noahfields.Models.Game;
+import com.noahfields.Models.Mechanic;
 
 public class MainEntryClass {
 

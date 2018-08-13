@@ -1,4 +1,4 @@
-package core.DAO;
+package com.noahfields.DAO;
 
 import java.io.IOException;
 import java.io.InputStream;

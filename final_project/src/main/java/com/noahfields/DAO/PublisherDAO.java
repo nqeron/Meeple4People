@@ -1,4 +1,4 @@
-package core.DAO;
+package com.noahfields.DAO;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -8,8 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import core.Models.Publisher;
+import org.springframework.stereotype.Repository;
 
+import com.noahfields.Models.Publisher;
+
+@Repository
 public class PublisherDAO {
 	
 	private static final String GETPUBLISHERFORGAMEID = "SELECT pub.id, pub.Name, pub.Website FROM Publishers pub join Game_Publishers gp on pub.id = gp.Publisher_ID WHERE gp.Game_ID = ?";

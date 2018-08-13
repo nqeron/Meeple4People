@@ -1,4 +1,4 @@
-package core.Encryption;
+package com.noahfields.Encryption;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

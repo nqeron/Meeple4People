@@ -1,12 +1,14 @@
-package web.controllers;
+package com.noahfields.controllers;
 
 import java.sql.Date;
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,14 +17,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import core.DAO.CustomerDAO;
-import core.DAO.ZipcodeDAO;
-import core.Models.Customer;
-import core.Models.Zipcode;
+import com.noahfields.DAO.CustomerDAO;
+import com.noahfields.DAO.ZipcodeDAO;
+import com.noahfields.Models.Customer;
+import com.noahfields.Models.Zipcode;
+import com.noahfields.services.CustomerService;
+import com.noahfields.services.ZipcodeService;
 
 @Controller
 public class CustomerController {
 
+	@Autowired
+	CustomerService customerService;
+	
+	@Autowired
+	ZipcodeService zipcodeService;
 	
 	@GetMapping("/register")
 	public String goToRegister() {
@@ -31,15 +40,14 @@ public class CustomerController {
 	
 	@PostMapping("/registerAction")
 	public String register(@RequestParam("username") String username, @RequestParam("email") String email, @RequestParam("inputPassword") String password, Model m, HttpServletRequest request) {
-		CustomerDAO customerDAO = new CustomerDAO();
-		Customer customer = customerDAO.getCustomerByUsername(username);
+		Customer customer = customerService.getCustomerByUsername(username);
 		
 		if( (customer != null) && !customer.equals(null) ) {
 			m.addAttribute("error","That username is already taken!");
 			return "signUp";
 		}
 		
-		customer = customerDAO.getCustomerByEmail(email);
+		customer = customerService.getCustomerByEmail(email);
 		if( (customer != null) && !customer.equals(null) ) {
 			m.addAttribute("error","That email is already taken!");
 			return "signUp";
@@ -54,7 +62,7 @@ public class CustomerController {
 		customer.setJoin_date(date);
 		customer.setBalance(0);
 		
-		int id = customerDAO.registerUser(customer);
+		int id = customerService.registerUser(customer);
 		if(id <= 0) {
 			m.addAttribute("error", "Unable to create user for some reason!");
 			return "signUp";
@@ -77,9 +85,12 @@ public class CustomerController {
 			return "login";
 		}
 		
-		Zipcode zip = new ZipcodeDAO().getZipcode(customer.getZipcode());
+		Zipcode zip = zipcodeService.getZipcode(customer.getZipcode());
+		
+		List<Zipcode> allZips = zipcodeService.getAllZips();
 		
 		m.addAttribute("zipcode", zip);
+		m.addAttribute("allZips", allZips);
 		
 		return "userProfile";
 	}
@@ -99,20 +110,22 @@ public class CustomerController {
 		//ModelAndView m = new ModelAndView();
 		
 		request.getSession().setAttribute("customer", null);
-		return new RedirectView(request.getHeader("Referer"));
+		String referer = request.getHeader("Referer");
+		if(referer.endsWith("loginAction") || referer.endsWith("updateUser") || referer.endsWith("registerAction")) {
+			referer = "/login";
+		}
+		return new RedirectView(referer);
 	}
 	
 	@PostMapping("/loginAction")
 	public String login(@RequestParam("username") String username, @RequestParam("inputPassword") String password, Model m, HttpServletRequest request) {
 		
-		CustomerDAO customerDao = new CustomerDAO();
-		
-		if(!customerDao.verifyUser(username, password)) {
+		if(!customerService.verifyUser(username, password)) {
 			m.addAttribute("error", "incorrect credentials");
 			return "login";
 		}
 		
-		Customer customer = customerDao.getCustomerByUsername(username);
+		Customer customer = customerService.getCustomerByUsername(username);
 		
 		if(customer == null || customer.equals(null)) {
 			m.addAttribute("error","Could not retrieve user");
@@ -146,6 +159,19 @@ public class CustomerController {
 			return userProfileMain(m, request);
 		}
 		
+		if("".equals(firstname)) {
+			firstname = null;
+		}
+		if("".equals(lastname)) {
+			lastname = null;
+		}
+		if("".equals(address1)) {
+			address1 = null;
+		}
+		if("".equals(address2)) {
+			address2 = null;
+		}
+		
 		Customer cust = (Customer) request.getSession().getAttribute("customer");
 		
 		if(cust == null || cust.equals(null)) {
@@ -153,14 +179,13 @@ public class CustomerController {
 			return "login";
 		}
 		
-		CustomerDAO customerDAO = new CustomerDAO();
-		Customer custEmail = customerDAO.getCustomerByEmail(email);
+		Customer custEmail = customerService.getCustomerByEmail(email);
 		if(!cust.equals(custEmail)) {
-			m.addAttribute("error", "That email is already taken!");
+			m.addAttribute("error", "That email is already taken! cust: " + cust + " custEmai: "+ custEmail);
 			return userProfileMain(m, request);
 		}
 		
-		Zipcode zipcodeObj =  new ZipcodeDAO().getZipcode(zip);
+		Zipcode zipcodeObj =  zipcodeService.getZipcode(zip);
 		if(zipcodeObj == null || zipcodeObj.equals(null)) {
 			m.addAttribute("error","That zipcode is not in the database, please contact the db admin");
 			return userProfileMain(m, request);
@@ -175,7 +200,7 @@ public class CustomerController {
 		cust.setE_mail(email);
 		
 		int reason = 0;
-		if((reason = customerDAO.updateCustomer(cust)) < 0) {
+		if((reason = customerService.updateCustomer(cust)) < 0) {
 			m.addAttribute("error", "Could not update user for reason " + reason + " customer id: " + cust.getId());
 		}
 		

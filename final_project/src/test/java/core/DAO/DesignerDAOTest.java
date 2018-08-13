@@ -13,8 +13,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import core.Models.Designer;
-import core.Models.Game;
+import com.noahfields.DAO.DesignerDAO;
+import com.noahfields.Models.Designer;
+import com.noahfields.Models.Game;
 
 /**
  * @author Students
@@ -41,7 +42,7 @@ class DesignerDAOTest {
 	}
 
 	/**
-	 * Test method for {@link core.DAO.DesignerDAO#getDesignersByNames(java.lang.String[][])}.
+	 * Test method for {@link com.noahfields.DAO.DesignerDAO#getDesignersByNames(java.lang.String[][])}.
 	 */
 	@Test
 	void testGetDesignersByNames() {
@@ -54,7 +55,7 @@ class DesignerDAOTest {
 	}
 
 	/**
-	 * Test method for {@link core.DAO.DesignerDAO#getDesignersForGame(core.Models.Game)}.
+	 * Test method for {@link com.noahfields.DAO.DesignerDAO#getDesignersForGame(com.noahfields.Models.Game)}.
 	 */
 	@Test
 	void testGetDesignersForGame() {

@@ -12,7 +12,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import core.Models.Zipcode;
+import com.noahfields.DAO.ZipcodeDAO;
+import com.noahfields.Models.Zipcode;
+
 import oracle.jdbc.proxy.annotation.Methods;
 
 class ZipcodeDAOTest {

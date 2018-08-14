@@ -46,7 +46,7 @@
     </c:choose>
     </div>
    </div>
-  <div class = "shoppingCart"><!--<i class="fas fa-shopping-cart fa-5x"></i>--> <img style="height:45px" src="https://png.icons8.com/ios/40/000000/shopping-cart-filled.png" /></div>
+  <div class = "shoppingCart"><!--<i class="fas fa-shopping-cart fa-5x"></i>--> <a href="/shoppingCart"> <img style="height:45px" src="https://png.icons8.com/ios/40/000000/shopping-cart-filled.png" /> </a> </div>
 </div>
 <div class="pageTitle">${game.getName()}</div>
 <br/>
@@ -220,7 +220,12 @@
 			</c:forEach>
 		</div>
 		<div class = "addToShoppingCart"> 
-			<a href="addGameToShoppingCart/${game.getId()}"><img src="https://png.icons8.com/ios/100/000000/add-shopping-cart-filled.png"> </a>
+			<form action="/addGameToShoppingCart" method = "post">
+				<button class="addToShoppingCartBtn" type="submit" name="gameId" value="${game.getId()}">
+	        			<img src="https://png.icons8.com/ios/100/000000/add-shopping-cart-filled.png">
+	        	</button>
+			</form>
+			<!-- <a href="/addGameToShoppingCart/${game.getId()}"><img src="https://png.icons8.com/ios/100/000000/add-shopping-cart-filled.png"> </a>  -->
 		</div>
 	</div>
 </div>

@@ -44,7 +44,7 @@
     </c:choose>
     </div>
    </div>
-  <div class = "shoppingCart"><!--<i class="fas fa-shopping-cart fa-5x"></i>--> <img style="height:45px" src="https://png.icons8.com/ios/40/000000/shopping-cart-filled.png" /></div>
+  <div class = "shoppingCart"><!--<i class="fas fa-shopping-cart fa-5x"></i>--> <a href="/shoppingCart"> <img style="height:45px" src="https://png.icons8.com/ios/40/000000/shopping-cart-filled.png" /> </a> </div>
 </div>
 		<div id = "Grid">
 			<div class ="pageTitle">Recommended Games</div>

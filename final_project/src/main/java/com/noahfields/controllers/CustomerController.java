@@ -111,7 +111,7 @@ public class CustomerController {
 		
 		request.getSession().setAttribute("customer", null);
 		String referer = request.getHeader("Referer");
-		if(referer.endsWith("loginAction") || referer.endsWith("updateUser") || referer.endsWith("registerAction")) {
+		if(referer.endsWith("loginAction") || referer.endsWith("updateUser") || referer.endsWith("registerAction") || referer.endsWith("removeItemFromShoppingCart")) {
 			referer = "/login";
 		}
 		return new RedirectView(referer);

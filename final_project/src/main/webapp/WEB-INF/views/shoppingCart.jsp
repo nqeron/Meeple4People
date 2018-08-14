@@ -5,11 +5,11 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Meeple4People - Mechanic: ${mechanic.getName()}</title>
+<title>Meeple4People - Shopping Cart</title>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<link rel="stylesheet" href="/resources/css/base.css">
-	<link rel="stylesheet" href="/resources/css/mechanicDetail.css">
+	<link rel="stylesheet" href="/resources/css/shoppingCart.css">
 </head>
 <body>
 <div class = "header">
@@ -48,11 +48,38 @@
    </div>
   <div class = "shoppingCart"><!--<i class="fas fa-shopping-cart fa-5x"></i>--> <a href="/shoppingCart"> <img style="height:45px" src="https://png.icons8.com/ios/40/000000/shopping-cart-filled.png" /> </a> </div>
 </div>
-
-<div class="pageTitle">${mechanic.getName()}</div>
+<div class = "pageTitle">Shopping Cart</div>
 <br/>
 <br/>
-<div class="description">${mechanic.getDescription()}</div>
-
+<div class = "GameList">
+	<c:forEach var = "mapItem" items="${itemGames.keySet()}">
+		<c:set var="game" value="${itemGames.get(mapItem)}" />
+		<div class="GameItem">
+			<div class="removeItem">
+				<form action="/removeItemFromShoppingCart" method="post">
+					<button class="removeBtn" type="submit" name="itemId" value="${mapItem.getItem_id()}">
+						<img alt="minus" src="https://png.icons8.com/material-outlined/48/000000/minus.png">
+					</button>
+				</form>
+			</div>
+			<div class = "picture">
+				<img src="" alt="image will go here">
+			</div>
+			<div class="name">${game.getName()}</div>
+			<div class="description">${game.getDescription()}</div>
+		</div>
+		<hr>
+	</c:forEach>
+</div>
+<hr>
+<div class = "bottom">
+	<div class="backToStore">
+		<a href="/">Go back to Store</a>
+	</div>
+	<div class="sum"> ${rentalSum}</div>
+	<div class="checkout">
+		<a href="/checkout">Checkout</a>
+	</div>
+</div>
 </body>
 </html>

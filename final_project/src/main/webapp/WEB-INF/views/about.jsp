@@ -27,7 +27,11 @@
       </div>
     </div> 
   <div class = "searchBar"><div class="form-group">
-          		<input type="text" class="form-control" placeholder="Search">
+          		<form action="/search" method="get">
+          			<input type="text" class="form-control" name="searchString" placeholder="Search" />
+          			<input type="hidden" name="page" value="1" /> 
+          			<input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1" />
+          		</form>
   </div></div>
   <div class = "userProfile-dropdown">
     

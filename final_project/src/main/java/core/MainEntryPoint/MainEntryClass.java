@@ -20,7 +20,7 @@ public class MainEntryClass {
 	public static void main(String[] args) {
 		
 		GameDAO gameDao = new GameDAO();
-		List<Game> games = gameDao.searchForGames("Viticulture", null, -1, -1, -1, -1, null, null);
+		List<Game> games = gameDao.searchForGames("Viticulture", null, -1, -1, -1, -1, null, null, null);
 		System.out.println(games.toString());
 		//in = new Scanner(System.in);
 		
@@ -83,14 +83,14 @@ public class MainEntryClass {
 		
 		System.out.println("Enter in the names of the Designers to search by, (e.g. Rosenberg, Uwe: Stegmeier, Jamie) :");
 		String designersLine = in.nextLine();
-		String[] designers = designersLine.split(": ");
-		String[][] designerNames = new String[designers.length][2];
-		for(int i = 0; i < designers.length; ++i) {
-			designerNames[i] = designers[i].split(", ");
-		}
+		String[] designers = designersLine.split(",\\s?");
+//		String[][] designerNames = new String[designers.length][2];
+//		for(int i = 0; i < designers.length; ++i) {
+//			designerNames[i] = designers[i].split(", ");
+//		}
 		
 		DesignerDAO designerDao = new DesignerDAO();
-		List<Designer> designerIds = designerDao.getDesignersByNames(designerNames);
+		List<Designer> designerIds = designerDao.getDesignersByNames(designers);
 		
 		System.out.println("Enter in the names of the Mechanics to search by, separated by commas");
 		String[] mechanicNames = in.nextLine().split(", ");

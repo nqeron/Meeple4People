@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -20,12 +21,12 @@ public class DesignerDAO {
 	private static final String GETDESIGNERSFORGAME = "SELECT des.id, des.First_name, des.Last_name, des.Website FROM Designers des join Game_Designers gd on des.id = gd.Designer_ID WHERE gd.Game_ID = ?";
 	
 	/**
-	 * @param designerNames: names of designers to search for - separated into list of first and last name 
+	 * @param designerNames: names of designers to search for - "First Last" 
 	 * @return list of designers with given names
 	 */
-	public List<Designer> getDesignersByNames(String[][] designerNames) {
+	public List<Designer> getDesignersByNames(String[] designerNames) {
 		
-		if(designerNames == null || designerNames.length <=0) {
+		if(designerNames == null || designerNames.length <=0 || Arrays.equals(designerNames,new String[] {""})) {
 			return null;
 		}
 		// TODO Auto-generated method stub
@@ -34,8 +35,9 @@ public class DesignerDAO {
 		//StringBuilder whereClause = new StringBuilder(designerNames.length * designerNames[0].length);
 		StringJoiner whereClause = new StringJoiner(" OR ");
 		List<String> names = new ArrayList<String>();
-		for(String[] designer: designerNames) {
-			if(designer == null || designer.length <= 0) {
+		for(String des: designerNames) {
+			String[] designer = des.trim().split(" ");
+			if(designer == null || designer.length <= 0 || des.isEmpty()) {
 				continue;
 			}
 			

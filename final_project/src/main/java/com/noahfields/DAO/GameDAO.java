@@ -14,14 +14,16 @@ import org.springframework.stereotype.Repository;
 import com.noahfields.Models.Designer;
 import com.noahfields.Models.Game;
 import com.noahfields.Models.Mechanic;
+import com.noahfields.Models.Publisher;
 
 @Repository
 public class GameDAO {
 
 	private static final String GETTOPRATEDGAMES = "Select * From topRated Where R BETWEEN ? AND ?";
 	private static final String GETGAMEBYID = "SELECT * FROM Games Where id = ?";
+	private static final String GETGAMESBYNAME = "SELECT * FROM Games WHERE Name LIKE ?";
 	
-	public List<Game> searchForGames(String name, int[] years, double lowCost, double highCost, double lowRating, double highRating, List<Designer> designers, List<Mechanic> mechanics ){
+	public List<Game> searchForGames(String name, int[] years, double lowCost, double highCost, double lowRating, double highRating, List<Designer> designers, List<Mechanic> mechanics, List<Publisher> publishers ){
 		
 		Connection conn = null;
 		try {
@@ -43,7 +45,7 @@ public class GameDAO {
 		
 		List<Game> games = null;
 		try {
-			PreparedStatement ps = searchForGamesSQL(conn, name, years, lowCost, highCost, lowRating, highRating, designers, mechanics);
+			PreparedStatement ps = searchForGamesSQL(conn, name, years, lowCost, highCost, lowRating, highRating, designers, mechanics, publishers);
 			ResultSet rs = ps.executeQuery();
 			games = new ArrayList<Game>();
 			while(rs.next()) {
@@ -67,15 +69,16 @@ public class GameDAO {
 	
 	
 
-	private PreparedStatement searchForGamesSQL(Connection conn, String name, int[] years, double lowCost, double highCost,  double lowRating, double highRating, List<Designer> designers, List<Mechanic> mechanics ) throws SQLException{
+	private PreparedStatement searchForGamesSQL(Connection conn, String name, int[] years, double lowCost, double highCost,  double lowRating, double highRating, List<Designer> designers, List<Mechanic> mechanics, List<Publisher> publishers ) throws SQLException{
 		String SQLBase = "SELECT game.id, game.Name, game.Description, game.Year_Published, game.Cost_of_Game, game.Average_Rating FROM Games game ";
 		
 		String Join = "";
 		String Where = " WHERE ";
+		String Order = " ORDER BY game.Average_Rating DESC, game.Name ASC";
 		int whereCount = 0;
 		ArrayList<Object> wherePart = new ArrayList<Object>();
 		if(designers != null && !designers.isEmpty() && designers.size() > 0) {
-			Join += " JOIN Game_Desginers gd on game.id = gd.Game_ID ";
+			Join += " JOIN Game_Designers gd on game.id = gd.Game_ID ";
 			Join += " JOIN Designers des on gd.Designer_ID = des.id ";
 			
 			Where += " des.id in ";
@@ -88,8 +91,14 @@ public class GameDAO {
 			Where += des.toString();
 			//wherePart[whereCount] = designers.toArray(null);
 			whereCount++;
+		} else if(designers != null && designers.isEmpty()) {
+			Join += " JOIN Game_Designers gd on game.id = gd.Game_ID ";
+			Join += " JOIN Designers des on gd.Designer_ID = des.id ";
+			
+			Where += " des.id is null ";
+			whereCount++;
 		}
-		
+	
 		if(mechanics != null && !mechanics.isEmpty() && mechanics.size() > 0) {
 			Join += " JOIN Game_Mechanics gm on game.id = gm.Game_ID ";
 			Join += " JOIN Mechanics mech on gm.Mechanic_ID = mech.id ";
@@ -106,15 +115,51 @@ public class GameDAO {
 			}
 			Where += mechs.toString();
 			whereCount++;
+		} else if(mechanics != null && mechanics.isEmpty()) {
+			Join += " JOIN Game_Mechanics gm on game.id = gm.Game_ID ";
+			Join += " JOIN Mechanics mech on gm.Mechanic_ID = mech.id ";
+			
+			if(whereCount > 0 ) {
+				Where += " AND ";
+			}
+			Where += " mech.id is null ";
+			whereCount++;
+		}
+		
+		if(publishers != null && !publishers.isEmpty() && publishers.size() > 0) {
+			Join += " JOIN Game_Publishers gp on game.id = gp.Game_ID ";
+			Join += " JOIN Publishers pub on gp.Publisher_ID = pub.id ";
+			
+			if(whereCount > 0 ) {
+				Where += " AND ";
+			}
+			Where += " pub.id in ";
+			
+			StringJoiner pubs = new StringJoiner(", ", "(", ")");
+			for(Publisher p: publishers) {
+				pubs.add("?");
+				wherePart.add( p.getId());
+			}
+			Where += pubs.toString();
+			whereCount++;
+		} else if(publishers != null && publishers.isEmpty()) {
+			Join += " JOIN Game_Publishers gp on game.id = gp.Game_ID ";
+			Join += " JOIN Publishers pub on gp.Publisher_ID = pub.id ";
+			
+			if(whereCount > 0 ) {
+				Where += " AND ";
+			}
+			Where += " pub.id is null ";
+			whereCount++;
 		}
 		
 		if(name != null && !name.equals("")) {
 			if(whereCount > 0) {
 				Where += " AND ";
 			}
-			Where += " game.Name LIKE ?% ";
+			Where += " UPPER(game.Name) LIKE UPPER(?) ";
 			//wherePart[whereCount] = name;
-			wherePart.add(name);
+			wherePart.add("%"+name+"%");
 			whereCount++;
 			
 		}
@@ -137,24 +182,24 @@ public class GameDAO {
 		if(whereCount >0) {
 			Where += " AND ";
 		}
-		Where += " game.Cost_of_Game > ?";
+		Where += " game.Cost_of_Game >= ?";
 		//wherePart[whereCount++] = lowCost;
 		wherePart.add(lowCost);
 		if(highCost > 0) {
 			Where += " AND ";
-			Where += " game.Cost_of_Game < ?"; //+ highCost;
+			Where += " game.Cost_of_Game <= ?"; //+ highCost;
 			//wherePart[whereCount++] = highCost;
 			wherePart.add(highCost);
 		}
 		
-		Where += " AND game.Average_Rating > ?"; //+ lowRating;
+		Where += " AND game.Average_Rating >= ?"; //+ lowRating;
 		wherePart.add(lowRating);
 		if(highRating > 0) {
-			Where += " AND game.Average_Rating < ?" + highRating;
+			Where += " AND game.Average_Rating <= ?";
 			wherePart.add(highRating);
 		}
 		
-		String SQL = SQLBase + Join + Where;
+		String SQL = SQLBase + Join + Where + Order;
 		PreparedStatement ps = conn.prepareStatement(SQL);
 
 		for(int i = 1; i <= wherePart.size(); ++i) {
@@ -267,5 +312,54 @@ public class GameDAO {
 		}
 		
 		return game;
+	}
+
+
+
+	public List<Game> searchForGamesByName(String name) {
+		Connection conn = null;
+		try {
+			conn = new OracleConnection().getConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(conn == null) {
+			return null;
+		}
+		
+		List<Game> games = null;
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(GETGAMESBYNAME);
+			ps.setString(1, "%"+name+"%");
+			
+			ResultSet rs = ps.executeQuery();
+			
+			games = new ArrayList<Game>();
+			while(rs.next()) {
+				Game game = new Game();
+				game.setId(rs.getInt(1));
+				game.setName(rs.getString(2));
+				game.setDescription(rs.getString(3));
+				game.setYear_published(rs.getInt(4));
+				game.setCost_of_game(rs.getDouble(5));
+				game.setAverage_Rating(rs.getDouble(6));
+				games.add(game);
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return games;
 	}
 }

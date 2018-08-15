@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +18,7 @@ import com.noahfields.Models.Publisher;
 public class PublisherDAO {
 	
 	private static final String GETPUBLISHERFORGAMEID = "SELECT pub.id, pub.Name, pub.Website FROM Publishers pub join Game_Publishers gp on pub.id = gp.Publisher_ID WHERE gp.Game_ID = ?";
+	private static final String GETPUBLISHERBYNAMEBASE = "SELECT * FROM Publishers";
 	
 	/** 
 	 * Method that queries the database for publishers associated with a specific game.
@@ -63,6 +66,64 @@ public class PublisherDAO {
 		}
 		
 		return publishers;
+	}
+
+	public List<Publisher> getPublishersByName(String[] publishers) {
+		if(publishers == null || publishers.length <=0 || Arrays.equals(publishers,new String[] {""})) {
+			return null;
+		}
+		
+		Connection conn = null;
+		try {
+			conn = new OracleConnection().getConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(conn == null) {
+			return null;
+		}
+		
+		List<Publisher> pubs = null;
+		
+		try {
+			String SQL_QUERY = GETPUBLISHERBYNAMEBASE;
+			String WHERE = " WHERE ";
+			StringJoiner LikeClause = new StringJoiner(" OR ");
+			for(String p: publishers) {
+				LikeClause.add("UPPER(Name) LIKE UPPER(?)");
+			}
+			//WHERE UPPER(Name) LIKE UPPER(?)
+			PreparedStatement ps = conn.prepareStatement(GETPUBLISHERBYNAMEBASE + WHERE + LikeClause.toString());
+			for(int i = 1; i <= publishers.length; ++i) {
+				String pubName = publishers[i-1];
+				ps.setString(i, "%"+pubName.trim()+"%");
+			}
+			
+			ResultSet rs = ps.executeQuery();
+			pubs = new ArrayList<Publisher>();
+			
+			while(rs.next()) {
+				Publisher publisher = new Publisher();
+				publisher.setId(rs.getInt(1));
+				publisher.setName(rs.getString(2));
+				publisher.setWebsite(rs.getString(3));
+				pubs.add(publisher);
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return pubs;
 	}
 
 }

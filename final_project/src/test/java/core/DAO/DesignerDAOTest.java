@@ -46,7 +46,7 @@ class DesignerDAOTest {
 	 */
 	@Test
 	void testGetDesignersByNames() {
-		List<Designer> actual = designerDao.getDesignersByNames(new String[][] { {"Uwe"}, {"Jamey", "Stegmaier"} });
+		List<Designer> actual = designerDao.getDesignersByNames(new String[] { "Uwe", "Jamey Stegmaier" });
 		List<Designer> expected = new ArrayList<Designer>();
 		expected.add(new Designer(1, "Uwe",	"Rosenberg", null));
 		expected.add(new Designer(4, "Jamey", "Stegmaier", "http://jameystegmaier.com/"));

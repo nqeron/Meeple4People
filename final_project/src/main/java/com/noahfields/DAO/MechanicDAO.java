@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -17,7 +18,7 @@ import com.noahfields.Models.Mechanic;
 @Repository
 public class MechanicDAO {
 
-	private static final String GETMECHANICSBYNAMEBASE = "SELECT * FROM Mechanics WHERE name in ";
+	private static final String GETMECHANICSBYNAMEBASE = "SELECT * FROM Mechanics WHERE UPPER(Name) in ";
 	private static final String GETMECHANICSBYGAMEID = "SELECT mech.id, mech.Name, mech.Description FROM Mechanics mech join Game_Mechanics gm on mech.id = gm.Mechanic_ID WHERE gm.Game_ID = ?";
 	private static final String GETMECHANICBYID = "SELECT * FROM Mechanics WHERE id = ?";
 	
@@ -28,13 +29,17 @@ public class MechanicDAO {
 	 * @return mechanics for given names
 	 */
 	public List<Mechanic> getMechanicsByName(String[] mechanicNames) {
+		if(mechanicNames == null || mechanicNames.length <=0 || Arrays.equals(mechanicNames,new String[] {""})) {
+			return null;
+		}
+		
 		String SQL = GETMECHANICSBYNAMEBASE;
 		
 		StringJoiner mechs = new StringJoiner(", ","(", ")");
 		List<String> names = new ArrayList<String>();
 		for(String m: mechanicNames) {
-			mechs.add("?");
-			names.add(m);
+			mechs.add("UPPER(?)");
+			names.add(m.trim());
 		}
 		SQL += mechs.toString();
 		

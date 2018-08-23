@@ -1,5 +1,7 @@
 package com.noahfields.Models;
 
+import java.text.DecimalFormat;
+
 public class Zipcode {
 
 	private int zipcode;
@@ -27,6 +29,10 @@ public class Zipcode {
 		return zipcode;
 	}
 
+	public String getZipcodeText() {
+		DecimalFormat format = new DecimalFormat("00000");
+		return format.format(zipcode);
+	}
 	/**
 	 * @param zipcode the zipcode to set
 	 */

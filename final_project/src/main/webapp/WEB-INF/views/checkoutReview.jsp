@@ -5,13 +5,11 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Meeple4People - Login</title>
+<title>Meeple4People - Checkout</title>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<link rel="stylesheet" href="/resources/css/base.css">
-	<link rel="stylesheet" href="/resources/css/login.css">
-	
-	<script type="text/javascript" src="/resources/js/login.js"></script>
+	<link rel="stylesheet" href="/resources/css/checkoutReview.css">
 </head>
 <body>
 <div class = "header">
@@ -54,36 +52,59 @@
    </div>
   <div class = "shoppingCart"><!--<i class="fas fa-shopping-cart fa-5x"></i>--> <a href="/shoppingCart"> <img style="height:45px" src="https://png.icons8.com/ios/40/000000/shopping-cart-filled.png" /> </a> </div>
 </div>
-
-<div class="pageTitle">
-	Login
-</div>
-
+<div class = "pageTitle">Checkout -- Review</div>
 <br/>
 <br/>
-<div class="loginForm">
-	<form name="login" action="/loginAction" method="post" onsubmit="return validateForm()">
-	  <div class="form-group row">
-	    <label for="username" class="col-sm-2 col-form-label">Username</label>
-	    <div class="col-sm-6">
-	      <input type="text" class="form-control" id="username" name="username" value="">
-	    </div>
-	  </div>
-	  <div class="form-group row">
-	    <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
-	    <div class="col-sm-6">
-	      <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="">
-	    </div>
-	  </div>
-	  <div class="loginButton">
-	  	<button type="submit" class="btn btn-primary">Log In</button>
-	  </div>
-	</form>
-	<div class="error">
-		${error}
+<div class = "Review">
+	<div class = "GameList">
+		<c:forEach var = "mapItem" items="${itemGames.keySet()}">
+			<c:set var="game" value="${itemGames.get(mapItem)}" />
+			<div class="GameItem">
+				<div class = "picture">
+					<img src="" alt="image will go here">
+				</div>
+				<div class="name">${game.getName()}</div>
+				<div class="description">${game.getDescription()}</div>
+			</div>
+			<hr>
+		</c:forEach>
+	</div>
+	<div class ="checkoutDetails">
+		<div class="shippingReview">
+			<span class="reviewLabel">Shipping: </span>
+			<pre>
+${shipCust.getFirst_name()} ${shipCust.getLast_name()}
+${shipCust.getAddress_line_1()}
+${shipCust.getAddress_line_2()}
+${shipCustZip.getCity()}, ${shipCustZip.getState()} ${shipCustZip.getZipcodeText()}
+			</pre>
+		</div>
+		<div class="BillingReview">
+			<span class="reviewLabel">Billing: </span>
+			<pre>
+${billCust.getFirst_name()} ${shipCust.getLast_name()}
+${billCust.getAddress_line_1()}
+${billCust.getAddress_line_2()}
+${billCustZip.getCity()}, ${billCustZip.getState()} ${billCustZip.getZipcodeText()}
+				
+Credit Card #: ${creditCard}
+			</pre>
+		</div>
 	</div>
 </div>
-
-
+<div class = "bottom">
+	<hr>
+	<div class="rentalSum">Price: ${rentalSum}</div>
+	<hr>
+	<div class="shippingCost">Shipping: ${shippingCost}</div>
+	<hr>
+	<div class="backToStore">
+		<a href="/">Go back to Store</a>
+	</div>
+	<div class="sum"> Total: ${totalSum}</div>
+	<div class="finalize">
+		<a href="/checkout/createOrder">Place Order</a>
+	</div>
+</div>
 </body>
 </html>

@@ -7,17 +7,19 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+<script type="text/javascript">
+	function doThis(){
+		var erMesg = document.getElementById("errorMessage");
+		erMesg.value = "${error}";
+	}
+</script>
 </head>
 <body>
-<h2>Test game recommendation</h2>
-${test}
-${gameList}
-<ol>
-
-<c:forEach var="game" items="${gameList}">
-<li>${game}</li>
-
-</c:forEach>
-</ol>
+<h2>Test java script</h2>
+${error}
+<form>
+	<input id="errorMessage" type="text" name="errorMessage">
+	<input type="button" onclick="doThis()"> 
+</form>
 </body>
 </html>

@@ -13,7 +13,33 @@
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script type="text/javascript" src="/resources/js/changeZip.js"></script>
-	<script type="text/javascript" src="/resources/js/userProfile.js"></script>
+	<script type="text/javascript" src="/resources/js/checkoutShipping.js"></script>
+	<script type="text/javascript">
+		function useProfile(){
+			var useProfile = document.getElementById("useProfileCheck").checked;
+			
+			var firstname = document.getElementById("firstname");
+			var lastname = document.getElementById("lastname");
+			var city = document.getElementById("city");
+			var state = document.getElementById("state");
+			var address1 = document.getElementById("address1");
+			var address2 = document.getElementById("address2");
+			var zipcode = document.getElementById("zipcode");
+			var country = document.getElementById("country");
+			var phone = document.getElementById("phone");
+			
+			firstname.value = useProfile ? "${customer.getFirst_name()}" : "";
+			lastname.value = useProfile ? "${customer.getLast_name()}" : "";
+			city.value = useProfile ? "${zipcode.getCity()}" : "";
+			state.value = useProfile ? "${zipcode.getState()}" : "";
+			address1.value = useProfile ? "${customer.getAddress_line_1()}" : "";
+			address2.value = useProfile ? "${customer.getAddress_line_2()}" : "";
+			zipcode.value = useProfile ? "${customer.getZipcode()}" : "${allZips.get(0).getZipcode()}";
+			country.value = useProfile ? "${zipcode.getCountry()}" : "";
+			phone.value = useProfile ? "${customer.getPhone()}" : "";
+		}
+		
+	</script>
 </head>
 <body>
 <div class = "header">
@@ -56,11 +82,15 @@
   <div class = "shoppingCart"><!--<i class="fas fa-shopping-cart fa-5x"></i>--> <a href="/shoppingCart"> <img style="height:45px" src="https://png.icons8.com/ios/40/000000/shopping-cart-filled.png" /> </a> </div>
 </div>
 <%--<%= session.getAttribute("customer") %> --%>
-<div class="pageTitle"> User Profile</div>
+<div class="pageTitle"> Checkout -- Shipping Info</div>
 <br/>
 <br/>
 <div class="userProfileForm">
-	<form name="profileForm" action="updateUser" method="post" onsubmit="return validateForm()">
+	<form name="shippingForm" action="/checkout/billing" method="post" onsubmit="return validateForm()">
+		<div class = "useProfile">
+			<label for="useProfileCheck">Use data from user profile</label>
+			<input type="checkbox"  id="useProfileCheck" onclick="useProfile()">
+		</div>	
 	  <div class="form-group row">
 	    <label for="firstname" class="col-sm-2 col-form-label">First Name</label>
 	    <div class="col-sm-3">
@@ -88,7 +118,7 @@
 	    </div>
 	    <label for="zipcode" class="col-sm-2 col-form-label">Zipcode</label>
 	    <div class="col-sm-3">
-	    	<select class="custom-select" id="zipcode" name="zipcode" onchange="changeZip()">
+	    	<select class="custom-select" id="zipcode" name="zipcode" onChange="changeZip()">
 	    		<c:forEach var = "zip" items="${allZips}">
 	    			<c:choose>
 	    				<c:when test="${zip.getZipcode() == customer.getZipcode()}">
@@ -119,13 +149,12 @@
 	    <div class="col-sm-3">
 	      <input type="tel" class="form-control" id="phone" name="phone" value="${customer.getPhone()}">
 	    </div>
-	    <label for="email" class="col-sm-2 col-form-label">Email</label>
-	    <div class="col-sm-3">
-	      <input type="text" class="form-control" id="email" name="email" value="${customer.getE_mail()}">
-	    </div>
 	  </div>
-	  <div class="updateProfileButton">
-	  	<button type="submit" class="btn btn-primary">Update Information</button>
+	  <div class = "goToShoppingCart">
+	  	<a href="/shoppingCart">Go Back</a><!-- <button></button>  -->
+	  </div>
+	  <div class="goToBilling">
+	  	<button type="submit" class="btn btn-primary">Proceed</button>
 	  </div>
 	</form>
 	<div class="error">

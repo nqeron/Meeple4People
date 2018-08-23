@@ -46,8 +46,9 @@ public class DesignerDAO {
 				names.add(designer[0]);
 				names.add(designer[1]);
 			} else {
-				whereClause.add("First_Name = ?");
-				names.add(designer[0]);
+				whereClause.add("UPPER(First_Name) LIKE UPPER(?) OR UPPER(LAST_Name) LIKE UPPER(?)");
+				names.add("%"+designer[0]+"%");
+				names.add("%"+designer[0]+"%");
 			}
 		}
 		

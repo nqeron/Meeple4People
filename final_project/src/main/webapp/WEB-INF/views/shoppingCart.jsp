@@ -82,7 +82,7 @@
 	</div>
 	<div class="sum"> ${rentalSum}</div>
 	<div class="checkout">
-		<a href="/checkout">Checkout</a>
+		<a href="/checkout/shipping">Checkout</a>
 	</div>
 </div>
 </body>

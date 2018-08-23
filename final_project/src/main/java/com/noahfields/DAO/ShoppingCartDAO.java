@@ -28,6 +28,7 @@ public class ShoppingCartDAO {
 			"  left join Shopping_Cart sc on item.Item_ID = sc.Item_ID" + 
 			"  WHERE game.id = ? AND item.Status_ID = 1 and sc.Item_ID is null and ROWNUM = 1";
 	private static final String REMOVEITEMFROMSHOPPINGCART = "DELETE FROM Shopping_Cart WHERE Customer_ID = ? AND Item_ID = ?";
+	private static final String UPDATEITEMSTATUS = "UPDATE Stock SET Status_ID = 3 WHERE Item_ID = ?"; //TODO What should the status id be? should it be set to 3 later?
 	
 	public List<StockItem> getItemsInCartForCustomer(int customer_id){
 		Connection conn = null;
@@ -243,6 +244,98 @@ public class ShoppingCartDAO {
 			
 			if(updated > 0) {
 				removed = true;
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return removed;
+	}
+
+	
+
+	public boolean updateItemsInStockToRented(List<StockItem> rentalsItems) {
+		Connection conn = null;
+		try {
+			conn = new OracleConnection().getConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(conn == null) {
+			return false;
+		}
+		
+		boolean updated = false;
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(UPDATEITEMSTATUS);
+			for(StockItem item: rentalsItems) {
+				ps.setInt(1, item.getItem_id());
+				ps.addBatch();
+			}
+			int[] executions = ps.executeBatch();
+			updated = true;
+			for(Integer i: executions) {
+				if(i < 0 || i == PreparedStatement.EXECUTE_FAILED) {
+					updated = false;
+					break;
+				}
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return updated;
+	}
+
+	public boolean removeItemsFromShoppingCart(List<StockItem> rentalsItems, int customerID) {
+		// TODO Auto-generated method stub
+		Connection conn = null;
+		try {
+			conn = new OracleConnection().getConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(conn == null) {
+			return false;
+		}
+		
+		boolean removed = false;
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(REMOVEITEMFROMSHOPPINGCART);
+			for(StockItem item: rentalsItems) {
+				ps.setInt(1, customerID);
+				ps.setInt(2, item.getItem_id());
+				ps.addBatch();
+			}
+			int[] executed = ps.executeBatch();
+			removed = true;
+			for(Integer i: executed) {
+				if(i == PreparedStatement.EXECUTE_FAILED) {
+					removed = false;
+					break;
+				}
 			}
 			conn.close();
 		} catch (SQLException e) {

@@ -22,7 +22,7 @@ import com.noahfields.services.ShoppingCartService;
 @Controller
 public class ShoppingCartController {
 
-	private static final double PRICEPERGAME = 5.00;
+	public static final double PRICEPERGAME = 5.00;
 	@Autowired
 	ShoppingCartService shoppingCartService;
 	

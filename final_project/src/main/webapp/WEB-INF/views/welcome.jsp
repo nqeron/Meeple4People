@@ -15,6 +15,7 @@
 </script>
 </head>
 <body>
+<jsp:include page="header.jsp"></jsp:include>
 <h2>Test java script</h2>
 ${error}
 <form>

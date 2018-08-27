@@ -5,10 +5,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.noahfields.Models.Game;
 import com.noahfields.Models.StockItem;
 
 @Repository
@@ -16,6 +18,8 @@ public class OrdersDAO {
 	
 	private static final String INSERTORDERFORCUSTOMER = "INSERT INTO Orders (Order_ID, Item_ID, Customer_ID, Date_Shipped) VALUES (?, ?, ?, NULL)";
 	private static final String GETNEXTORDERID = "SELECT MAX(Order_ID) + 1 FROM Orders";
+	private static final String GETGAMESFORORDER = "SELECT game.id, game.Name, game.Description, game.Year_Published, game.Cost_of_Game, game.Average_Rating FROM Games game"
+			+ " JOIN Stock item on game.id = item.Game_ID JOIN Orders ord on item.Item_ID = ord.Item_ID WHERE ord.Order_ID = ?";
 
 	public int addItemsToOrderForCustomer(List<StockItem> rentalsItems, int customerID) {
 		Connection conn = null;
@@ -71,5 +75,52 @@ public class OrdersDAO {
 		}
 		
 		return id;
+	}
+
+	public List<Game> getGamesForOrder(int orderID){
+		
+		Connection conn = null;
+		
+		try {
+			conn = new OracleConnection().getConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(conn == null) {
+			return null;
+		}
+		
+		List<Game> games = null;
+		try {
+			PreparedStatement ps = conn.prepareStatement(GETGAMESFORORDER);
+			ps.setInt(1, orderID);
+			
+			ResultSet rs = ps.executeQuery();
+			games = new ArrayList<Game>();
+			while(rs.next()) {
+				Game game = new Game();
+				game.setId(rs.getInt(1));
+				game.setName(rs.getString(2));
+				game.setDescription(rs.getString(3));
+				game.setYear_published(rs.getInt(4));
+				game.setCost_of_game(rs.getDouble(5));
+				game.setAverage_Rating(rs.getDouble(6));
+				games.add(game);
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return games;
 	}
 }

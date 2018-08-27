@@ -28,7 +28,8 @@ public class ShoppingCartDAO {
 			"  left join Shopping_Cart sc on item.Item_ID = sc.Item_ID" + 
 			"  WHERE game.id = ? AND item.Status_ID = 1 and sc.Item_ID is null and ROWNUM = 1";
 	private static final String REMOVEITEMFROMSHOPPINGCART = "DELETE FROM Shopping_Cart WHERE Customer_ID = ? AND Item_ID = ?";
-	private static final String UPDATEITEMSTATUS = "UPDATE Stock SET Status_ID = 3 WHERE Item_ID = ?"; //TODO What should the status id be? should it be set to 3 later?
+	private static final String UPDATEITEMSTATUSTORENTED = "UPDATE Stock SET Status_ID = 3 WHERE Item_ID = ?"; //TODO What should the status id be? should it be set to 3 later?
+	private static final String UPDATERENTALITEMSTATUSTOINSTOCK = "UPDATE Stock SET Status_ID = 1 WHERE Item_ID = (SELECT Item_ID From Rentals Where id = ?)"; //TODO Maybe should be EnRoute (2) and push off setting to 1 when confirmed in stock, but whatever 
 	
 	public List<StockItem> getItemsInCartForCustomer(int customer_id){
 		Connection conn = null;
@@ -278,7 +279,7 @@ public class ShoppingCartDAO {
 		boolean updated = false;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(UPDATEITEMSTATUS);
+			PreparedStatement ps = conn.prepareStatement(UPDATEITEMSTATUSTORENTED);
 			for(StockItem item: rentalsItems) {
 				ps.setInt(1, item.getItem_id());
 				ps.addBatch();
@@ -344,5 +345,44 @@ public class ShoppingCartDAO {
 		}
 		
 		return removed;
+	}
+
+	public boolean updateRentalItemsToInStock(int rentalId) {
+		Connection conn = null;
+		try {
+			conn = new OracleConnection().getConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(conn == null) {
+			return false;
+		}
+		
+		boolean updated = false;
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(UPDATERENTALITEMSTATUSTOINSTOCK);
+			ps.setInt(1, rentalId);
+			
+			int changed = ps.executeUpdate();
+			updated = true;
+			if(changed < 0 || changed == PreparedStatement.EXECUTE_FAILED) {
+				updated = false;
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//
+		return updated;
 	}
 }

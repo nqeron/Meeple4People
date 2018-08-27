@@ -9,6 +9,7 @@ import com.noahfields.DAO.GeneralDAO;
 import com.noahfields.DAO.OrdersDAO;
 import com.noahfields.DAO.RentalsDAO;
 import com.noahfields.DAO.ShoppingCartDAO;
+import com.noahfields.Models.Game;
 import com.noahfields.Models.StockItem;
 
 @Service
@@ -27,7 +28,9 @@ public class OrdersService {
 	OrdersDAO ordersDAO;
 	
 	public int placeOrdersForCustomer(List<StockItem> rentalsItems, int customerID) {
-		// TODO Auto-generated method stub
+		
+		generalDAO.startTransaction();
+		
 		int id = ordersDAO.addItemsToOrderForCustomer(rentalsItems, customerID);
 		if(id < 0) {
 			generalDAO.rollback();
@@ -55,5 +58,9 @@ public class OrdersService {
 		
 		return id;
 		
+	}
+	
+	public List<Game> getGamesForOrder(int orderId){
+		return ordersDAO.getGamesForOrder(orderId);
 	}
 }

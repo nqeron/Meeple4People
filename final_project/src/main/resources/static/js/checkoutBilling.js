@@ -44,17 +44,28 @@ function validateForm(){
 	}
 	
 	var expireMM = document.forms["billingForm"]["expireMM"].value;
-	var expireYY = document.forms["billingForm"]["expireYY"].value;
+	var expireYYYY = document.forms["billingForm"]["expireYYYY"].value;
 	
-	if(expireMM == "" || expireYY == ""){
+	if(expireMM == "" || expireYYYY == ""){
 		alert("Please fill in the expiration date");
 		return false;
 	}
 	
+	var expCheck = checkExiprationDate(expireYYYY,expireMM);
+	if(!expCheck){
+		alert("Please enter a current expiration date");
+		return false;
+	}
 	
 	
 	return true;
 	
+}
+
+function checkExiprationDate(expireYYYY, expireMM){
+	testDay = new Date(expireYYYY, expireMM - 1);
+	today = new Date();
+	return testDay >= today;
 }
 
 var luhnChk = (function (arr) {

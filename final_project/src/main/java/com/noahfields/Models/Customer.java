@@ -217,6 +217,10 @@ public class Customer {
 	public double getBalance() {
 		return balance;
 	}
+	
+	public String getBalanceText() {
+		return String.format("$%.2f", balance);
+	}
 
 	/**
 	 * @param balance the balance to set

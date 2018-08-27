@@ -1,0 +1,54 @@
+@charset "ISO-8859-1";
+
+.pageTitle{
+	font-size: 50px;
+	text-align: center; 
+}
+
+.GameList{
+	width: 65%;
+	margin-left: 5%;
+	float: left;
+}
+
+
+.GameItem{
+	height: 90px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.picture{
+	border: solid;
+    width: 110px;
+    height: 90px;
+    float: left;
+    margin-left: 10px;
+}
+
+.name{
+	float: left;
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.balance{
+	float: left;
+	margin-top: 3%;
+	margin-left: 5%;
+}
+
+.rentalDate, .dueDate{
+	float: left;
+	margin-left: 10px;
+	font-size: 28px;
+}
+
+.return{
+	float: left;
+	margin-left: 10px;
+	
+}

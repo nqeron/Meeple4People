@@ -57,27 +57,27 @@
 	  <div class="form-group row">
 	    <label for="fullname" class="col-sm-2 col-form-label">Full Name</label>
 	    <div class="col-sm-3 col">
-	      <input type="text" class="form-control" id="fullname" name="fullname" value="">
+	      <input type="text" class="form-control" id="fullname" name="fullname" value="" tabindex="1">
 	    </div>
 	    <label for="creditCardnum" class="col-sm-2">Credit Card #</label>
 	    <div class="col-sm-3">
-	    	<input type="text" class="form-control" id="creditCardNum" name="creditCardNum">
+	    	<input type="text" class="form-control" id="creditCardNum" name="creditCardNum" tabindex="4">
 	    </div>
 	  </div>
 	  <div class="form-group row">
 	    <label for="address1" class="col-sm-2 col-form-label">Address Line 1</label>
 	    <div class="col-sm-3">
-	      <input type="text" class="form-control" id="address1" name="address1" value="">
+	      <input type="text" class="form-control" id="address1" name="address1" value="" tabindex="2">
 	    </div>
 	    <label for="cvv" class="col-sm-2"> CVV </label>
 	    <div class="col-sm-3">
-	    	<input type="text" class="form-control" id="cvv" name="cvv">
+	    	<input type="text" class="form-control" id="cvv" name="cvv" tabindex="5">
 	    </div>
 	  </div>
 	  <div class="form-group row">
 	    <label for="address2" class="col-sm-2 col-form-label">Address Line 2</label>
 	    <div class="col-sm-3">
-	      <input type="text" class="form-control" id="address2" name="address2" value="">
+	      <input type="text" class="form-control" id="address2" name="address2" value="" tabindex="3">
 	    </div>
 	    <label for="expireMM" class="col-sm-2">Expiration date</label>
 	    <div class="col-sm-3 expire">
@@ -96,17 +96,17 @@
 			    <option value='11'>November</option>
 			    <option value='12'>December</option>
 	    	</select>
-	    	<select class="custom-select" id="expireYY" name="expireYY">
+	    	<select class="custom-select" id="expireYYYY" name="expireYYYY">
 	    		<option value=''>Year</option>
-	    		<option value='18'>2018</option>
-	    		<option value='19'>2019</option>
-	    		<option value='20'>2020</option>
-	    		<option value='21'>2021</option>
-	    		<option value='22'>2022</option>
-	    		<option value='23'>2023</option>
-	    		<option value='24'>2024</option>
-	    		<option value='25'>2025</option>
-	    		<option value='26'>2026</option>
+	    		<option value='2018'>2018</option>
+	    		<option value='2019'>2019</option>
+	    		<option value='2020'>2020</option>
+	    		<option value='2021'>2021</option>
+	    		<option value='2022'>2022</option>
+	    		<option value='2023'>2023</option>
+	    		<option value='2024'>2024</option>
+	    		<option value='2025'>2025</option>
+	    		<option value='2026'>2026</option>
 	    	</select>
 	    </div>
 	  </div>

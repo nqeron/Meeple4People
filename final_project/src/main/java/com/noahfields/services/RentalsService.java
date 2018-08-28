@@ -29,16 +29,16 @@ public class RentalsService {
 
 	public boolean returnRental(int rentalId) {
 		
-		// generalDAO.startTransaction();
+		//generalDAO.startTransaction();
 		
-		boolean remove = rentalsDAO.removeRental(rentalId);
-		if(!remove) {
+		boolean changed = shCartDAO.updateRentalItemsToInStock(rentalId);
+		if(!changed) {
 			generalDAO.rollback();
 			return false;
 		}
 		
-		boolean changed = shCartDAO.updateRentalItemsToInStock(rentalId);
-		if(!changed) {
+		boolean remove = rentalsDAO.removeRental(rentalId);
+		if(!remove) {
 			generalDAO.rollback();
 			return false;
 		}

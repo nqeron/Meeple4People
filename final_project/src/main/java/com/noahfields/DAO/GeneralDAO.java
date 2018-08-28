@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public class GeneralDAO {
 
 	private static final String ROLLBACK = "ROLLBACK";
-	private static final String STARTTRANSACTION = "START TRANSACTION";
+	private static final String STARTTRANSACTION = "Start Transaction";
 
 	public void rollback() {
 		Connection conn = null;

@@ -17,6 +17,16 @@ public class CommentService {
 	public List<Comment> getCommentsForGame(int id, int start) {
 		return commentDao.getCommentsForGame(id, start);
 	}
+
+	public boolean customerHasCommentsForRental(int customerId, int rentalId) {
+		// TODO Auto-generated method stub
+		return commentDao.customerHasCommentsForRental(customerId, rentalId);
+	}
+
+	public boolean addReviewForCustomerToGame(int customerId, int gameId, double ratingVal, String commentText) {
+		// TODO Auto-generated method stub
+		return commentDao.addReviewForCustomerToGame(customerId, gameId, ratingVal, commentText);
+	}
 	
 	
 }

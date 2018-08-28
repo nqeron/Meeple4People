@@ -2,10 +2,12 @@ package com.noahfields.DAO;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -17,6 +19,8 @@ public class CommentDAO {
 	
 	private static final String GETTOPCOMMENTSFORGAME = "SELECT Game_ID, Customer_ID, Comment_Text, Rating, Comment_Date, ROW_NUMBER() OVER (order by Rating DESC) R FROM Game_Comments WHERE Game_ID = ?";
 	private static final String GETSTARTCOMMENTS = "SELECT * FROM (" + GETTOPCOMMENTSFORGAME + ") WHERE R BETWEEN ? and ?";
+	private static final String HASCOMMENTFORRENTAL = "SELECT * FROM Game_Comments gc JOIN Stock item on gc.Game_ID = item.Game_ID JOIN Rentals rental on item.Item_ID = rental.Item_ID WHERE rental.id = ? AND gc.Customer_ID = ?";
+	private static final String INSERTREVIEW = "INSERT INTO Game_Comments VALUES (?, ?, ?, ?, ?)";
 	
 	public List<Comment> getCommentsForGame(int id, int start){
 		Connection conn = null;
@@ -63,6 +67,90 @@ public class CommentDAO {
 		}
 		
 		return comments;
+	}
+
+	public boolean customerHasCommentsForRental(int customerId, int rentalId) {
+		Connection conn = null;
+		
+		try {
+			conn = new OracleConnection().getConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(conn == null) {
+			return false;
+		}
+		
+		boolean hasComment = false;
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(HASCOMMENTFORRENTAL);
+			ps.setInt(1, rentalId);
+			ps.setInt(2, customerId);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				hasComment = true;
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return hasComment;
+	}
+
+	public boolean addReviewForCustomerToGame(int customerId, int gameId, double ratingVal, String commentText) {
+		Connection conn = null;
+		
+		try {
+			conn = new OracleConnection().getConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(conn == null) {
+			return false;
+		}
+		
+		boolean added = false;
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(INSERTREVIEW);
+			ps.setInt(1, gameId);
+			ps.setInt(2, customerId);
+			ps.setString(3, commentText);
+			ps.setDouble(4, ratingVal);
+			ps.setDate(5, new Date(Calendar.getInstance().getTime().getTime()));
+			
+			int updated = ps.executeUpdate();
+			if(updated > 0 && updated != PreparedStatement.EXECUTE_FAILED) {
+				added = true;
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return added;
 	}
 
 }

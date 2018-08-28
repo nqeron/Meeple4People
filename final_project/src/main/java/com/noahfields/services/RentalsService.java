@@ -45,5 +45,10 @@ public class RentalsService {
 		
 		return true;
 	}
+
+	public Game getGameFromRental(int rentalId) {
+		// TODO Auto-generated method stub
+		return rentalsDAO.getGameFromRental(rentalId);
+	}
 	
 }

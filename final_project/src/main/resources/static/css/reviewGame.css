@@ -1,0 +1,49 @@
+@charset "ISO-8859-1";
+
+.pageTitle{
+	font-size: 50px;
+	text-align: center;
+}
+
+.fullBox{
+	margin-left: 36.8%;
+    width: 63.2%;
+    display: inline-grid;
+}
+
+.picture {
+    float: left;
+}
+
+.picture img {
+    width: 220px;
+    border: solid;
+    height: 150px;
+    display: inline-grid;
+}
+
+.nameAndRating {
+    margin-left: 10px;
+    float: left;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.name{
+    font-size: 28px;
+}
+    
+.commentFormBox {
+    text-align: center;
+    font-size: 28px;
+}
+
+button.reviewBtn {
+    float: left;
+    margin-left: 21%;
+}
+
+button.skipBtn {
+    float: left;
+    margin-left: 10%;
+}

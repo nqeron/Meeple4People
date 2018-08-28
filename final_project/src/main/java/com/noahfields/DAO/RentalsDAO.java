@@ -27,6 +27,8 @@ public class RentalsDAO {
 	private static final String GETGAMESRENTEDFORCUSTOMER = "SELECT game.id, game.Name, game.Description, game.Year_Published, game.Cost_of_Game, game.Average_Rating, rental.id, rental.Date_Rented, rental.Due_Date FROM Games game"
 			+ " JOIN Stock item on game.id = item.Game_ID JOIN Rentals rental on item.Item_ID = rental.Item_ID WHERE rental.Customer_ID = ?";
 	private static final String REMOVERENTALBYID = "DELETE FROM Rentals WHERE id = ?";
+	private static final String GETGAMEFROMRENTAL = "SELECT game.id, game.Name, game.Description, game.Year_Published, game.Cost_of_Game, game.Average_Rating FROM Games game JOIN Stock item on game.id = item.Game_ID "
+			+ " JOIN Rentals rental on item.Item_ID = rental.Item_ID WHERE rental.id = ?";
 
 	public boolean addItemsToRentalsForCustomer(List<StockItem> rentalsItems, int customerID) {
 		Connection conn = null;
@@ -170,5 +172,51 @@ Connection conn = null;
 		}
 		
 		return removed;
+	}
+
+	public Game getGameFromRental(int rentalId) {
+		Connection conn = null;
+		
+		try {
+			conn = new OracleConnection().getConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(conn == null) {
+			return null;
+		}
+		
+		Game game = null;
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(GETGAMEFROMRENTAL);
+			ps.setInt(1, rentalId);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				game = new Game();
+				game.setId(rs.getInt(1));
+				game.setName(rs.getString(2));
+				game.setDescription(rs.getString(3));
+				game.setYear_published(rs.getInt(4));
+				game.setCost_of_game(rs.getDouble(5));
+				game.setAverage_Rating(rs.getDouble(6));
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return game;
 	}
 }

@@ -18,9 +18,9 @@ public class CommentService {
 		return commentDao.getCommentsForGame(id, start);
 	}
 
-	public boolean customerHasCommentsForRental(int customerId, int rentalId) {
+	public boolean customerHasCommentsForGame(int customerId, int gameId) {
 		// TODO Auto-generated method stub
-		return commentDao.customerHasCommentsForRental(customerId, rentalId);
+		return commentDao.customerHasCommentsForGame(customerId, gameId);
 	}
 
 	public boolean addReviewForCustomerToGame(int customerId, int gameId, double ratingVal, String commentText) {

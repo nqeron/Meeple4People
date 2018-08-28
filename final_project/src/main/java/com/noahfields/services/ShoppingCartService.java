@@ -17,8 +17,16 @@ import com.noahfields.Models.StockItem;
 @Service
 public class ShoppingCartService {
 
+	public static final int COUlDNOTBEADDED = -2;
+	public static final int EXCEEDMAXNUMGAMES = -1;
+	private static final int MAXNUMGAMES = 5;
+	public static final int CUSTOMERISSUSPENDED = -3;
+	
 	@Autowired
 	ShoppingCartDAO shCartDAO;
+	
+	@Autowired
+	RentalsDAO rentalsDAO;
 	
 	
 	public List<StockItem> getItemsInCartForCustomer(int customer_id){
@@ -29,8 +37,19 @@ public class ShoppingCartService {
 		return shCartDAO.getNextAvailableStockItemForGame(gameId);
 	}
 	
-	public boolean addItemToShoppingCartForCustomer(StockItem item, Customer customer) {
-		return shCartDAO.addItemToShoppingCartForCustomer(item.getItem_id(), customer.getId());
+	public int addItemToShoppingCartForCustomer(StockItem item, Customer customer) {
+		if(customer.getMember_status() == "Suspended") {
+			return CUSTOMERISSUSPENDED;
+		}
+		
+		int numItemsInCart = shCartDAO.getNumItemsInCartForCustomer(customer.getId());
+		int numItemsRented = rentalsDAO.getNumItemsRentedForCustomer(customer.getId());
+		
+		if(numItemsInCart + numItemsRented >= MAXNUMGAMES) {
+			return EXCEEDMAXNUMGAMES;
+		}
+		boolean added = shCartDAO.addItemToShoppingCartForCustomer(item.getItem_id(), customer.getId());
+		return added? 1 : COUlDNOTBEADDED;
 	}
 
 	public Map<StockItem, Game> getGamesInCartForCustomer(List<StockItem> customerItems) {

@@ -74,7 +74,7 @@ public class RentalsController {
 			return getRentals(m, request);
 		}
 		
-		boolean hasCommented = commentService.customerHasCommentsForRental(cust.getId(), rentalId);
+		boolean hasCommented = commentService.customerHasCommentsForGame(cust.getId(), game.getId());
 		if(!hasCommented) {
 			Picture picture = pictureService.getPictureForGameofSize(game.getId(), 2);
 			m.addAttribute("game", game);

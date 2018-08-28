@@ -29,7 +29,7 @@ public class RentalsService {
 
 	public boolean returnRental(int rentalId) {
 		
-		generalDAO.startTransaction();
+		// generalDAO.startTransaction();
 		
 		boolean remove = rentalsDAO.removeRental(rentalId);
 		if(!remove) {

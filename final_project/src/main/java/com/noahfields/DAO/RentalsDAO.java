@@ -29,6 +29,7 @@ public class RentalsDAO {
 	private static final String REMOVERENTALBYID = "DELETE FROM Rentals WHERE id = ?";
 	private static final String GETGAMEFROMRENTAL = "SELECT game.id, game.Name, game.Description, game.Year_Published, game.Cost_of_Game, game.Average_Rating FROM Games game JOIN Stock item on game.id = item.Game_ID "
 			+ " JOIN Rentals rental on item.Item_ID = rental.Item_ID WHERE rental.id = ?";
+	private static final String GETNUMITEMSRENTEDFORCUSTOMER = "SELECT Count(Item_ID) FROM Rentals WHERE Customer_ID = ?";
 
 	public boolean addItemsToRentalsForCustomer(List<StockItem> rentalsItems, int customerID) {
 		Connection conn = null;
@@ -218,5 +219,45 @@ Connection conn = null;
 		}
 		
 		return game;
+	}
+
+	public int getNumItemsRentedForCustomer(int id) {
+		Connection conn = null;
+		
+		try {
+			conn = new OracleConnection().getConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(conn == null) {
+			return -1;
+		}
+		
+		int numItems = -1;
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(GETNUMITEMSRENTEDFORCUSTOMER);
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			numItems = 0;
+			if(rs.next()) {
+				numItems = rs.getInt(1);
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return numItems;
 	}
 }

@@ -126,6 +126,7 @@
 	        				<img src="https://png.icons8.com/ios/64/000000/add-shopping-cart-filled.png">
 	        			</button>
 					</form>
+					<div class="error">${error}</div>
 				</div>
 			</div>
 			<hr>

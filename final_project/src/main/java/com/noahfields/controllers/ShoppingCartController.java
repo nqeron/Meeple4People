@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.noahfields.Models.Customer;
@@ -33,7 +34,7 @@ public class ShoppingCartController {
 	PictureService pictureService;
 	
 	@PostMapping("addGameToShoppingCart")
-	public RedirectView addGameToShoppingCart(@RequestParam("gameId") int gameId, Model m, HttpServletRequest request) {
+	public RedirectView addGameToShoppingCart(@RequestParam("gameId") int gameId, Model m, HttpServletRequest request, RedirectAttributes redir) {
 		Customer cust = (Customer) request.getSession().getAttribute("customer");
 		
 		if(cust == null || cust.equals(null)) {
@@ -44,14 +45,23 @@ public class ShoppingCartController {
 		StockItem item = shoppingCartService.getNextAvailableStockItemForGame(gameId);
 		
 		if(item == null || item.equals(null)) {
-			m.addAttribute("error", "item is out of stock");
+			redir.addFlashAttribute("error","Item is out of stock");
 			return new RedirectView(request.getHeader("Referer"));
 		}
 		
-		boolean added = shoppingCartService.addItemToShoppingCartForCustomer(item, cust);
-		if(!added) {
-			m.addAttribute("error", "could not add item to shopping cart!");
-			return new RedirectView(request.getHeader("Referer"));
+		int added = shoppingCartService.addItemToShoppingCartForCustomer(item, cust);
+		if(added < 0) {
+			if(added == shoppingCartService.COUlDNOTBEADDED) {
+				m.addAttribute("error", "could not add item to shopping cart!");
+				redir.addFlashAttribute("error", "could not add item to shopping cart!");
+			} else if(added == shoppingCartService.EXCEEDMAXNUMGAMES) {
+				m.addAttribute("error", "You've exceeded the maximum limit of games allowed");
+				redir.addFlashAttribute("error", "You've exceeded the maximum limit of games allowed");
+			} else if(added == shoppingCartService.CUSTOMERISSUSPENDED) {
+				redir.addFlashAttribute("error", "You can not add a game while suspended. To get your status revoked please contact a customer representative.");
+			}
+			RedirectView review = new RedirectView(request.getHeader("Referer"));
+			return review;
 		}
 		
 		return new RedirectView("/shoppingCart");

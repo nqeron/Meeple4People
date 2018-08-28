@@ -17,7 +17,7 @@ import com.noahfields.Models.StockItem;
 public class ShoppingCartDAO {
 
 	private static final String GETITEMSINCARTFORCUSTOMER = "SELECT item.Item_ID, item.Game_ID, item.Status_ID, item.Serial_Number, item.Acquisition_Date, item.Condition_ID, item.Last_Examined"
-			+ " FROM Stock item join Shopping_Cart sc on item.Item_ID = sc.Item_ID WHERE Customer_ID = ?";
+			+ " FROM Stock item join Shopping_Cart sc on item.Item_ID = sc.Item_ID WHERE sc.Customer_ID = ?";
 	private static final String GETGAMEFORITEM = "SELECT game.id, game.Name, game.Description, game.Year_Published, game.Cost_of_Game, game.Average_Rating"
 			+ " FROM Games game join Stock item on game.id = item.Game_ID where item.Item_ID = ?";
 	private static final String GETNEXTSHOPPINGCARTID = "SELECT Max(id) + 1 FROM Shopping_Cart";
@@ -30,6 +30,7 @@ public class ShoppingCartDAO {
 	private static final String REMOVEITEMFROMSHOPPINGCART = "DELETE FROM Shopping_Cart WHERE Customer_ID = ? AND Item_ID = ?";
 	private static final String UPDATEITEMSTATUSTORENTED = "UPDATE Stock SET Status_ID = 3 WHERE Item_ID = ?"; //TODO What should the status id be? should it be set to 3 later?
 	private static final String UPDATERENTALITEMSTATUSTOINSTOCK = "UPDATE Stock SET Status_ID = 1 WHERE Item_ID = (SELECT Item_ID From Rentals Where id = ?)"; //TODO Maybe should be EnRoute (2) and push off setting to 1 when confirmed in stock, but whatever 
+	private static final String GETNUMITEMSINCARTFORCUSTOMER = "SELECT Count(Item_ID) FROM Shopping_Cart WHERE Customer_ID = ?";
 	
 	public List<StockItem> getItemsInCartForCustomer(int customer_id){
 		Connection conn = null;
@@ -384,5 +385,45 @@ public class ShoppingCartDAO {
 		}
 		//
 		return updated;
+	}
+
+	public int getNumItemsInCartForCustomer(int id) {
+		Connection conn = null;
+		
+		try {
+			conn = new OracleConnection().getConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(conn == null) {
+			return -1;
+		}
+		
+		int numItems = -1;
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(GETNUMITEMSINCARTFORCUSTOMER);
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			numItems = 0;
+			if(rs.next()) {
+				numItems = rs.getInt(1);
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return numItems;
 	}
 }

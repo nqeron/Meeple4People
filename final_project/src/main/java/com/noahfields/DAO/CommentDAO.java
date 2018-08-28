@@ -19,7 +19,7 @@ public class CommentDAO {
 	
 	private static final String GETTOPCOMMENTSFORGAME = "SELECT Game_ID, Customer_ID, Comment_Text, Rating, Comment_Date, ROW_NUMBER() OVER (order by Rating DESC) R FROM Game_Comments WHERE Game_ID = ?";
 	private static final String GETSTARTCOMMENTS = "SELECT * FROM (" + GETTOPCOMMENTSFORGAME + ") WHERE R BETWEEN ? and ?";
-	private static final String HASCOMMENTFORRENTAL = "SELECT * FROM Game_Comments gc JOIN Stock item on gc.Game_ID = item.Game_ID JOIN Rentals rental on item.Item_ID = rental.Item_ID WHERE rental.id = ? AND gc.Customer_ID = ?";
+	private static final String HASCOMMENTFORRENTAL = "SELECT * FROM Game_Comments gc WHERE gc.Customer_ID = ? AND gc.Game_ID = ?";
 	private static final String INSERTREVIEW = "INSERT INTO Game_Comments VALUES (?, ?, ?, ?, ?)";
 	
 	public List<Comment> getCommentsForGame(int id, int start){
@@ -69,7 +69,7 @@ public class CommentDAO {
 		return comments;
 	}
 
-	public boolean customerHasCommentsForRental(int customerId, int rentalId) {
+	public boolean customerHasCommentsForGame(int customerId, int gameId) {
 		Connection conn = null;
 		
 		try {
@@ -93,8 +93,8 @@ public class CommentDAO {
 		
 		try {
 			PreparedStatement ps = conn.prepareStatement(HASCOMMENTFORRENTAL);
-			ps.setInt(1, rentalId);
-			ps.setInt(2, customerId);
+			ps.setInt(1, customerId);
+			ps.setInt(2, gameId);
 			
 			ResultSet rs = ps.executeQuery();
 			

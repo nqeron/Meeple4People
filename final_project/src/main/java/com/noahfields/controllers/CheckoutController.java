@@ -1,5 +1,6 @@
 package com.noahfields.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.noahfields.Models.Customer;
 import com.noahfields.Models.Game;
+import com.noahfields.Models.Picture;
 import com.noahfields.Models.StockItem;
 import com.noahfields.Models.Zipcode;
 import com.noahfields.services.OrdersService;
+import com.noahfields.services.PictureService;
 import com.noahfields.services.ShoppingCartService;
 import com.noahfields.services.ZipcodeService;
 
@@ -35,6 +38,9 @@ public class CheckoutController {
 	
 	@Autowired
 	ZipcodeService zipcodeService;
+	
+	@Autowired
+	PictureService pictureService;
 	
 	@GetMapping("/checkout/shipping")
 	public String checkoutShipping(Model m, HttpServletRequest request) {
@@ -153,6 +159,8 @@ public class CheckoutController {
 		List<StockItem> rentalsItems = shoppingCartService.getItemsInCartForCustomer(cust.getId());
 		Map<StockItem, Game> rentals = shoppingCartService.getGamesInCartForCustomer(rentalsItems);
 		
+		Map<Game, Picture> gamePictures = pictureService.getPicturesForGamesofSize(new ArrayList<Game>(rentals.values()), 2);
+		
 		request.getSession().setAttribute("billCust", billingTo);
 		Customer shippingTo = (Customer) request.getSession().getAttribute("shipCust");
 		
@@ -181,6 +189,7 @@ public class CheckoutController {
 		
 		request.getSession().setAttribute("creditCardString", creditCardString);
 		
+		m.addAttribute("gamePictures", gamePictures);
 		m.addAttribute("shipCust", shippingTo);
 		m.addAttribute("shipCustZip", shipZip);
 		m.addAttribute("billCust", billingTo);
@@ -223,6 +232,8 @@ public class CheckoutController {
 		List<StockItem> rentalsItems = shoppingCartService.getItemsInCartForCustomer(cust.getId());
 		Map<StockItem, Game> rentals = shoppingCartService.getGamesInCartForCustomer(rentalsItems);
 		
+		Map<Game, Picture> gamePictures = pictureService.getPicturesForGamesofSize(new ArrayList<Game>(rentals.values()), 2);
+		
 		double rentalAmount = 0;
 		if(!rentals.isEmpty()) {
 			rentalAmount = ShoppingCartController.PRICEPERGAME * rentals.size();
@@ -236,6 +247,7 @@ public class CheckoutController {
 		
 		String totalSumString = String.format("$%.2f", totalSum);
 		
+		m.addAttribute("gamePictures", gamePictures);
 		m.addAttribute("shipCust", shippingTo);
 		m.addAttribute("shipCustZip", shipZip);
 		m.addAttribute("billCust", billingTo);

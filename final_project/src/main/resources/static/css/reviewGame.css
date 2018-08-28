@@ -17,8 +17,7 @@
 
 .picture img {
     width: 220px;
-    border: solid;
-    height: 150px;
+    height: 180px;
     display: inline-grid;
 }
 

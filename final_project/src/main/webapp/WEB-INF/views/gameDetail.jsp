@@ -53,7 +53,7 @@
 				</ul>
 			</div>
 			<div class="picAndRating">
-				<div class="picture"> <image class="gamePic" src="" alt="image will go here" /> </div>
+				<div class="picture"> <image class="gamePic" src="${picture.getUriResource()}" alt="image will go here" height="180" width="220" /> </div>
 				<div class="averageRating">
 					<c:set var="avgRating" value = "${game.getAverage_Rating()}"></c:set>
 						<c:choose>

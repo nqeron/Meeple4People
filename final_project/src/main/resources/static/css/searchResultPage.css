@@ -24,7 +24,7 @@
 .picture{
 	width: 110px;
     height: 90px;
-    border: solid;
+    /*border: solid;*/
     object-fit: contain;
     flex-shrink: 0;
 }

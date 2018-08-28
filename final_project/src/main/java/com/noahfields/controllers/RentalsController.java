@@ -1,5 +1,6 @@
 package com.noahfields.controllers;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.noahfields.Models.Customer;
 import com.noahfields.Models.Game;
+import com.noahfields.Models.Picture;
 import com.noahfields.Models.Rental;
 import com.noahfields.services.CommentService;
 import com.noahfields.services.GameService;
+import com.noahfields.services.PictureService;
 import com.noahfields.services.RentalsService;
 
 @Controller
@@ -30,6 +33,9 @@ public class RentalsController {
 	@Autowired
 	GameService gameService;
 	
+	@Autowired
+	PictureService pictureService;
+	
 	@GetMapping("/rentals")
 	public String getRentals(Model m, HttpServletRequest request) {
 		
@@ -42,7 +48,10 @@ public class RentalsController {
 		
 		Map<Game, Rental> gamesRented = rentalsService.getGamesRentedForCustomer(cust.getId());
 		
+		Map<Game, Picture> gamePictures = pictureService.getPicturesForGamesofSize(new ArrayList<Game>(gamesRented.keySet()), 2);
+		
 		m.addAttribute("gamesRented", gamesRented);
+		m.addAttribute("gamePictures", gamePictures);
 		
 		return "rentals";
 	}
@@ -67,7 +76,9 @@ public class RentalsController {
 		
 		boolean hasCommented = commentService.customerHasCommentsForRental(cust.getId(), rentalId);
 		if(!hasCommented) {
+			Picture picture = pictureService.getPictureForGameofSize(game.getId(), 2);
 			m.addAttribute("game", game);
+			m.addAttribute("picture", picture);
 			return "reviewGame";
 		}
 		
@@ -89,7 +100,9 @@ public class RentalsController {
 		if(!addedReview) {
 			m.addAttribute("error", "could not add review for customer");
 			Game game = gameService.getGameByID(gameId);
+			Picture picture = pictureService.getPictureForGameofSize(gameId, 2);
 			m.addAttribute("game", game);
+			m.addAttribute("picture", picture);
 			return "reviewGame";
 		}
 		

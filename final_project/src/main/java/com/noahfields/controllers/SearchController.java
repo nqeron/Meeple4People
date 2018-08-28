@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.noahfields.Models.Designer;
 import com.noahfields.Models.Game;
 import com.noahfields.Models.Mechanic;
+import com.noahfields.Models.Picture;
 import com.noahfields.Models.Publisher;
 import com.noahfields.services.DesignerService;
 import com.noahfields.services.GameService;
 import com.noahfields.services.MechanicService;
+import com.noahfields.services.PictureService;
 import com.noahfields.services.PublisherService;
 
 @Controller
@@ -38,6 +40,9 @@ public class SearchController {
 	
 	@Autowired
 	MechanicService mechanicService;
+	
+	@Autowired
+	PictureService pictureService;
 	
 	@GetMapping("/search")
 	public String searchFor(@RequestParam("searchString") String search, @RequestParam("page") int page, Model m) {
@@ -87,8 +92,10 @@ public class SearchController {
 			gameMechanicMap.put(game, gameMechanics);
 		}
 		//List<Game> games = gameService.searchForGamesByName(name);
+		Map<Game, Picture> gamePictures = pictureService.getPicturesForGamesofSize(games, 2);
 		
 		m.addAttribute("games", games);
+		m.addAttribute("gamePictures", gamePictures);
 		m.addAttribute("designers", gameDesignerMap);
 		m.addAttribute("publishers", gamePublisherMap);
 		m.addAttribute("mechanics", gameMechanicMap);

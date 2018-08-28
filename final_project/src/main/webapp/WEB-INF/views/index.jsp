@@ -27,7 +27,7 @@
 						<div id = "game_<%=i %>" class = "game_box">
 							<a class="gameLink" href="games/${game.getId()}">
 								<div class = "game_image">
-									<image src="" alt="image will go here"/>
+									<image src="${gamePictures.get(game).getUriResource()}" alt="image will go here" height="180" width="220"/>
 								</div>
 							</a>
 							<div class = "game_name">

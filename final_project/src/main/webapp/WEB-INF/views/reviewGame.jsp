@@ -21,7 +21,7 @@
 <br/>
 <div class="fullBox">
 <div class="gameBox">
-	<div class = "picture"> <img alt="image will go here" src=""></div>
+	<div class = "picture"> <img alt="image will go here" src="${picture.getUriResource()}" height="180" width="220"></div>
 	<div class = "nameAndRating">
 		<div class = "name"> ${game.getName()}</div>
 		<div class="rating"> 

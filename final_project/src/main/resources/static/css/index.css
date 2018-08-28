@@ -13,9 +13,9 @@
 }
 
 .gameGrid .game_image{
-  height:140px;
+  height:180px;
   width: 220px;
-  border:solid;
+  /*border:solid;*/
 }
 
 .gameGrid td{

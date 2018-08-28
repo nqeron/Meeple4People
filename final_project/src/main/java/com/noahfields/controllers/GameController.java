@@ -2,6 +2,7 @@ package com.noahfields.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.taglibs.standard.lang.jstl.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,13 @@ import com.noahfields.Models.Comment;
 import com.noahfields.Models.Designer;
 import com.noahfields.Models.Game;
 import com.noahfields.Models.Mechanic;
+import com.noahfields.Models.Picture;
 import com.noahfields.Models.Publisher;
 import com.noahfields.services.CommentService;
 import com.noahfields.services.DesignerService;
 import com.noahfields.services.GameService;
 import com.noahfields.services.MechanicService;
+import com.noahfields.services.PictureService;
 import com.noahfields.services.PublisherService;
 
 @Controller
@@ -48,12 +51,17 @@ public class GameController {
 	@Autowired
 	CommentService commentService;
 
+	@Autowired
+	PictureService pictureService;
+
 	//private final static org.slj
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String index(Model m) {
 		m.addAttribute("test", "A test");
 		List<Game> games = gameService.getRecommendedGames(1);
+		Map<Game,Picture> gamePictures = pictureService.getPicturesForGamesofSize(games,2);
 		m.addAttribute("gameList", games);
+		m.addAttribute("gamePictures",gamePictures);
 		m.addAttribute("recommended",7);
 		return "index";
 	}
@@ -72,7 +80,10 @@ public class GameController {
 			}
 			next = sz + 1;
 		}
+		
+		Map<Game,Picture> gamePictures = pictureService.getPicturesForGamesofSize(games,2);
 		m.addAttribute("gameList", games);
+		m.addAttribute("gamePictures",gamePictures);
 		m.addAttribute("recommended",next+6);
 		return "index";
 	}
@@ -100,11 +111,14 @@ public class GameController {
 		List<Mechanic> mechanics = mechanicService.getMechanicsForGame(game);
 		List<Comment> comments = commentService.getCommentsForGame(id, 1);
 		
+		Picture picture = pictureService.getPictureForGameofSize(game.getId(), 2);
+		
 		m.addAttribute("game", game);
 		m.addAttribute("designers", designers);
 		m.addAttribute("publishers", publishers);
 		m.addAttribute("mechanics", mechanics);
 		m.addAttribute("ratings", comments);
+		m.addAttribute("picture", picture);
 		
 		return "gameDetail";
 	}

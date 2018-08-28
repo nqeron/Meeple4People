@@ -22,7 +22,7 @@
 			<c:set var="rental" value="${gamesRented.get(game)}" />
 			<div class="GameItem">
 				<div class = "picture">
-					<img src="" alt="image will go here">
+					<img src="${gamePictures.get(game).getUriResource()}" alt="image will go here" width="110" height="90">
 				</div>
 				<div class="name">${game.getName()}</div>
 				<div class="rentalDate">Date rented: ${rental.getDate_rented()}</div>

@@ -9,10 +9,11 @@
 	width: 75%;
 	margin-left: 5%;
 	float: left;
+	display: flex;
+	flex-direction: column;
 }
 
 .picture{
-	border: solid;
     width: 110px;
     height: 90px;
     float: left;

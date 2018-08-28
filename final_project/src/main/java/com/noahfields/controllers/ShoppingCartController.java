@@ -1,5 +1,6 @@
 package com.noahfields.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.noahfields.Models.Customer;
 import com.noahfields.Models.Game;
+import com.noahfields.Models.Picture;
 import com.noahfields.Models.StockItem;
+import com.noahfields.services.PictureService;
 import com.noahfields.services.ShoppingCartService;
 
 @Controller
@@ -25,6 +28,9 @@ public class ShoppingCartController {
 	public static final double PRICEPERGAME = 5.00;
 	@Autowired
 	ShoppingCartService shoppingCartService;
+	
+	@Autowired
+	PictureService pictureService;
 	
 	@PostMapping("addGameToShoppingCart")
 	public RedirectView addGameToShoppingCart(@RequestParam("gameId") int gameId, Model m, HttpServletRequest request) {
@@ -70,8 +76,11 @@ public class ShoppingCartController {
 		
 		String rentalAmountString = String.format("$%.2f", rentalAmount);
 		
+		Map<Game, Picture> gamePictures = pictureService.getPicturesForGamesofSize(new ArrayList<Game>(itemGames.values()), 2);
+		
 		m.addAttribute("itemGames", itemGames);
 		m.addAttribute("rentalSum", rentalAmountString);
+		m.addAttribute("gamePictures",gamePictures);
 		//itemGames.keySet()getClass();
 		return "shoppingCart";
 	}

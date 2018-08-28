@@ -25,7 +25,7 @@
 		<c:forEach var="game" items="${games}">
 			<div class = "gameItem">
 				<div class = "picture">
-					<img src="" alt="image will go here">
+					<img src="${gamePictures.get(game).getUriResource()}" alt="image will go here" width="110" height="90">
 				</div>
 				<div class = "nameRating">
 					<div class = "name"> ${game.getName()}</div>

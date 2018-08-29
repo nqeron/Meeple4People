@@ -19,12 +19,10 @@ public class CommentService {
 	}
 
 	public boolean customerHasCommentsForGame(int customerId, int gameId) {
-		// TODO Auto-generated method stub
 		return commentDao.customerHasCommentsForGame(customerId, gameId);
 	}
 
 	public boolean addReviewForCustomerToGame(int customerId, int gameId, double ratingVal, String commentText) {
-		// TODO Auto-generated method stub
 		return commentDao.addReviewForCustomerToGame(customerId, gameId, ratingVal, commentText);
 	}
 	

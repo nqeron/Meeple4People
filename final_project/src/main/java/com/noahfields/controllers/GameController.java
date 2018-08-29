@@ -26,6 +26,7 @@ import com.noahfields.Models.Game;
 import com.noahfields.Models.Mechanic;
 import com.noahfields.Models.Picture;
 import com.noahfields.Models.Publisher;
+import com.noahfields.exceptions.NoGameFoundException;
 import com.noahfields.services.CommentService;
 import com.noahfields.services.DesignerService;
 import com.noahfields.services.GameService;
@@ -99,11 +100,11 @@ public class GameController {
 	}
 	
 	@GetMapping("/games/{id}")
-	public String getGameDetail(@PathVariable int id, Model m) {
+	public String getGameDetail(@PathVariable int id, Model m) throws NoGameFoundException {
 		Game game = gameService.getGameByID(id);
 		
 		if(game == null || game.equals(null)) {
-			return null; //TODO return an error page
+			throw new NoGameFoundException();
 		}
 		
 		List<Designer> designers = designerService.getDesignersForGame(game);

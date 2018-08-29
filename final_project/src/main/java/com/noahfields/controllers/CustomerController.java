@@ -95,11 +95,6 @@ public class CustomerController {
 		return "userProfile";
 	}
 	
-//	private String userProfileMain(Model m, HttpServletRequest request) {
-//		// TODO Auto-generated method stub
-//		return "userProfile";
-//	}
-	
 	@GetMapping("/login")
 	public String goToLoginPage() {
 		return "login";

@@ -39,14 +39,11 @@ public class GameService {
 	}
 
 	public List<Game> searchForGamesByName(String name) {
-		// TODO Auto-generated method stub
-//		return gameDao.searchForGamesByName(name); 
 		return gameDao.searchForGames(name, null, -1, -1, -1, -1, null, null, null);
 	}
 
 	public List<Game> searchForGames(String name, String[] yearsPublished, String[] ratings, String[] designers,
 			String[] publishers, String[] mechanics, String[] cost) {
-		// TODO Auto-generated method stub
 		List<Publisher> publisherVals = publisherDAO.getPublishersByName(publishers);
 		List<Mechanic> mechanicVals = mechanicDAO.getMechanicsByName(mechanics);
 		List<Designer> designerVals = designerDAO.getDesignersByNames(designers);

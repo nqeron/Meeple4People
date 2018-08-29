@@ -8,14 +8,18 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan("com.noahfields")
-public class SpringMain { //extends SpringBootServletInitializer {
+public class SpringMain extends SpringBootServletInitializer { //extends SpringBootServletInitializer {
 
 //	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 //		return application.sources(SpringMain.class);
 //	}
 	
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+	      return builder.sources(SpringMain.class);
+	}
+	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		SpringApplication.run(SpringMain.class, args);
 	}
 

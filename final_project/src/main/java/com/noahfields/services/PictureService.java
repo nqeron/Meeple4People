@@ -32,7 +32,6 @@ public class PictureService {
 	}
 
 	public Picture getPictureForGameofSize(int gameId, int size) {
-		// TODO Auto-generated method stub
 		return pictureDAO.getPictureOfSizeForGame(size, gameId);
 	}
 

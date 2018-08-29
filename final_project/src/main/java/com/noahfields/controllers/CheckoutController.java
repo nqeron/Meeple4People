@@ -200,7 +200,7 @@ public class CheckoutController {
 		m.addAttribute("totalSum", totalSumString);
 		m.addAttribute("creditCard", creditCardString);
 		
-		return "checkoutReview"; //TODO create a confirmation page!
+		return "checkoutReview";
 	}
 	
 	@GetMapping("/checkout/createOrder")

@@ -62,7 +62,6 @@ public class ShoppingCartService {
 	}
 
 	public boolean removeItemFromShoppingCart(int itemId, int customerId) {
-		// TODO Auto-generated method stub
 		return shCartDAO.removeItemFromShoppingCart(itemId,customerId);
 	}
 

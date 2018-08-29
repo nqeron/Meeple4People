@@ -16,12 +16,10 @@ public class Encryption {
 	}
 
 	public static String getHexBinaryString(byte[] salt) {
-		// TODO Auto-generated method stub
 		return DatatypeConverter.printHexBinary(salt);
 	}
 
 	public static String getPassword(String password, byte[] salt) throws NoSuchAlgorithmException {
-		// TODO Auto-generated method stub
 		MessageDigest md = MessageDigest.getInstance("SHA-256");
 		md.update(salt);
 		byte[] digest = md.digest(password.getBytes());
@@ -30,7 +28,6 @@ public class Encryption {
 	}
 
 	public static byte[] getBytesFromString(String salt) {
-		// TODO Auto-generated method stub
 		return DatatypeConverter.parseHexBinary(salt);
 	}
 

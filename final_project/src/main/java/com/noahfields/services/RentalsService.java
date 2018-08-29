@@ -47,7 +47,6 @@ public class RentalsService {
 	}
 
 	public Game getGameFromRental(int rentalId) {
-		// TODO Auto-generated method stub
 		return rentalsDAO.getGameFromRental(rentalId);
 	}
 	

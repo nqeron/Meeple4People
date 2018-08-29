@@ -175,7 +175,7 @@ public class CustomerController {
 		}
 		
 		Customer custEmail = customerService.getCustomerByEmail(email);
-		if(!cust.equals(custEmail)) {
+		if(custEmail != null && !cust.equals(custEmail)) {
 			m.addAttribute("error", "That email is already taken! cust: " + cust + " custEmai: "+ custEmail);
 			return userProfileMain(m, request);
 		}

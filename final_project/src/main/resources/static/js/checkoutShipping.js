@@ -31,6 +31,22 @@ function validateForm(){
 		return false;
 	}
 	
+	var phone = document.forms["shippingForm"]["phone"].value;
+	if(phone != ""){
+		var phoneValid = validatePhoneNum(phone);
+		if(!phoneValid){
+			alert("That's not a valid phone number!");
+			return false;
+		}
+	} else {
+		alert("Please enter a phone number!");
+		return false;
+	}
+	
 	return true;
 	
+}
+
+function validatePhoneNum(phone){
+	return phone.match(/\d/g).length===10;
 }

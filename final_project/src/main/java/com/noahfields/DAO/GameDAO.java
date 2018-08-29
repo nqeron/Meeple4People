@@ -22,6 +22,7 @@ public class GameDAO {
 	private static final String GETTOPRATEDGAMES = "Select * From topRated Where R BETWEEN ? AND ?";
 	private static final String GETGAMEBYID = "SELECT * FROM Games Where id = ?";
 	private static final String GETGAMESBYNAME = "SELECT * FROM Games WHERE Name LIKE ?";
+	private static final String GETNUMGAMES = "SELECT Count(id) FROM Games";
 	
 	public List<Game> searchForGames(String name, int[] years, double lowCost, double highCost, double lowRating, double highRating, List<Designer> designers, List<Mechanic> mechanics, List<Publisher> publishers ){
 		
@@ -361,5 +362,46 @@ public class GameDAO {
 		}
 		
 		return games;
+	}
+
+
+
+	public int getNumGames() {
+		Connection conn = null;
+		
+		try {
+			conn = new OracleConnection().getConnection();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(conn == null) {
+			return 0;
+		}
+		
+		int numGames = 0;
+		
+		try {
+			PreparedStatement ps = conn.prepareStatement(GETNUMGAMES);
+			
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				numGames = rs.getInt(1);
+			}
+			
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return numGames;
 	}
 }

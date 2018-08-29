@@ -7,9 +7,9 @@
 
 .gameGrid{
     text-align: center;
-    width:50%;
-    margin-left: 25%;
-    margin-right: 25%;
+    width:40%;
+    margin-left: -3%;
+    float: left;
 }
 
 .gameGrid .game_image{
@@ -27,8 +27,16 @@
     margin: 5px;
 }
 
+.prevGames {
+    width: 5%;
+    float: left;
+    margin-top: 10%;
+    margin-left: 30%;
+}
+
 .nextGames{
-	float:right;
+	float: left;
+	margin-top: 10%;
 }
 
 a.gameLink{

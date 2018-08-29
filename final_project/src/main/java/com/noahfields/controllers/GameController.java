@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,21 +59,27 @@ public class GameController {
 	//private final static org.slj
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String index(Model m) {
-		m.addAttribute("test", "A test");
 		List<Game> games = gameService.getRecommendedGames(1);
 		Map<Game,Picture> gamePictures = pictureService.getPicturesForGamesofSize(games,2);
+		
+		m.addAttribute("size", games.size() + 6);
 		m.addAttribute("gameList", games);
 		m.addAttribute("gamePictures",gamePictures);
 		m.addAttribute("recommended",7);
+		m.addAttribute("pastNumGames", false);
 		return "index";
 	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public String postIndex(@RequestParam("nextRecommended") String nextRecommended, Model m) {
-		m.addAttribute("test", "A test");
-		int next = Integer.parseInt(nextRecommended);
+	public String postIndex(@RequestParam("nextRecommended") int nextRecommended, Model m) {
+		int numGames = gameService.getNumGames();
+		if(nextRecommended <= 0) {
+			nextRecommended = numGames - 5;
+		}
+		int next = nextRecommended;
 		List<Game> games = gameService.getRecommendedGames(next);
-		m.addAttribute("size", games.size());
+		int size = games.size();
+		
 		if (games.size() < 6) {
 			List<Game> initialGames = gameService.getRecommendedGames(1);
 			int sz = games.size();
@@ -81,13 +88,24 @@ public class GameController {
 			}
 			next = sz + 1;
 		}
-		
+		size += 6;
+		boolean pastNumGames = next + 6 > numGames;
 		Map<Game,Picture> gamePictures = pictureService.getPicturesForGamesofSize(games,2);
+		m.addAttribute("size", size);
 		m.addAttribute("gameList", games);
 		m.addAttribute("gamePictures",gamePictures);
 		m.addAttribute("recommended",next+6);
+		m.addAttribute("pastNumGames", pastNumGames);
 		return "index";
 	}
+	
+//	@PostMapping("/prevGames")
+//	public String getPreviousRecommendedGames(@RequestParam("prevRecommended") int prevRecommended, Model m) {
+//		if(prevRecommended < 0) {
+//			prevRecommended = gameService.getNumGames() - 6;
+//		}
+//		return postIndex(prevRecommended, m);
+//	}
 	
 	@RequestMapping(value = "/welcome")
 	public ModelAndView welcome(Model m) {

@@ -16,6 +16,15 @@
 			<div class ="pageTitle">Recommended Games</div>
 			<br/>
 			<br/>
+			<div class="prevGames">
+				<c:if test="${recommended - size > 0}"> 
+					<form action="/" method="post">
+		        		<button type="submit" name="nextRecommended" value="${recommended - size}">
+		        			<i class="fas fa-caret-left fa-5x"></i>
+		        		</button>
+	    			</form>
+    			</c:if>
+    		</div>
 			<%int i = 0;%>
 			<div> 
 				<table class = "gameGrid">
@@ -102,11 +111,13 @@
 			</table>
 			</div>
 			<div class = "nextGames">
-				<form action = "" method = "post">
-	        		<button type="submit" name="nextRecommended" value="${recommended}">
-	        			<i class="fas fa-caret-right fa-5x"></i>
-	        		</button>
-    			</form>
+				<c:if test="${!pastNumGames}">
+					<form action = "/" method = "post">
+		        		<button type="submit" name="nextRecommended" value="${recommended}">
+		        			<i class="fas fa-caret-right fa-5x"></i>
+		        		</button>
+	    			</form>
+    			</c:if>
     		</div>
 		</div>
 	</div>

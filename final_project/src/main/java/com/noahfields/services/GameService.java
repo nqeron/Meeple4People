@@ -101,4 +101,8 @@ public class GameService {
 		
 		return gameDao.searchForGames(name, years, lowCost, highCost, lowRating, highRating, designerVals, mechanicVals, publisherVals);
 	}
+
+	public int getNumGames() {
+		return gameDao.getNumGames();
+	}
 }

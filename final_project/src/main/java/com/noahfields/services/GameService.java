@@ -31,19 +31,26 @@ public class GameService {
 	PublisherDAO publisherDAO;
 	
 	public List<Game> getRecommendedGames(int start){
+		gameDao.connect();
 		return gameDao.getRecommendedGames(start);
 	}
 
 	public Game getGameByID(int id) {
+		gameDao.connect();
 		return gameDao.getGameByID(id);
 	}
 
 	public List<Game> searchForGamesByName(String name) {
+		gameDao.connect();
 		return gameDao.searchForGames(name, null, -1, -1, -1, -1, null, null, null);
 	}
 
 	public List<Game> searchForGames(String name, String[] yearsPublished, String[] ratings, String[] designers,
 			String[] publishers, String[] mechanics, String[] cost) {
+		
+		designerDAO.connect();
+		mechanicDAO.connect();
+		
 		List<Publisher> publisherVals = publisherDAO.getPublishersByName(publishers);
 		List<Mechanic> mechanicVals = mechanicDAO.getMechanicsByName(mechanics);
 		List<Designer> designerVals = designerDAO.getDesignersByNames(designers);
@@ -98,11 +105,12 @@ public class GameService {
 				
 			}
 		}
-		
+		gameDao.connect();
 		return gameDao.searchForGames(name, years, lowCost, highCost, lowRating, highRating, designerVals, mechanicVals, publisherVals);
 	}
 
 	public int getNumGames() {
+		gameDao.connect();
 		return gameDao.getNumGames();
 	}
 }

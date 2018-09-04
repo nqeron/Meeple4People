@@ -1,7 +1,7 @@
 /**
  * 
  */
-package core.DAO;
+package tests.DAO;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,6 +30,8 @@ class MechanicDAOTest {
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		mechanicDao = new MechanicDAO();
+		mechanicDao.setKeepOpen(true);
+		mechanicDao.connect();
 	}
 
 	/**
@@ -37,6 +39,7 @@ class MechanicDAOTest {
 	 */
 	@AfterAll
 	static void tearDownAfterClass() throws Exception {
+		mechanicDao.dispose();
 		mechanicDao = null;
 	}
 
@@ -67,6 +70,14 @@ class MechanicDAOTest {
 		expected.add(new Mechanic(1, "Worker Placement", "players select individual actions from a set of actions available to all players."));
 		expected.add(new Mechanic(11, "Hand Management", "Hand management games are games with cards in them that reward players for playing the cards in certain sequences or groups."));
 		expected.add(new Mechanic(15, "Variable Phase Order",  "Variable Phase Order implies that turns may not be played the same way as before and / or after"));
+		
+		Assertions.assertEquals(expected, actual);
+	}
+	
+	@Test
+	void testGetMechanicByID() {
+		Mechanic expected = new Mechanic(11, "Hand Management", "Hand management games are games with cards in them that reward players for playing the cards in certain sequences or groups.");
+		Mechanic actual = mechanicDao.getMechanicByID(11);
 		
 		Assertions.assertEquals(expected, actual);
 	}

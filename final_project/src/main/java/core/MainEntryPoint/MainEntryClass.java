@@ -20,6 +20,7 @@ public class MainEntryClass {
 	public static void main(String[] args) {
 		
 		GameDAO gameDao = new GameDAO();
+		gameDao.connect();
 		List<Game> games = gameDao.searchForGames("Viticulture", null, -1, -1, -1, -1, null, null, null);
 		System.out.println(games.toString());
 		//in = new Scanner(System.in);
@@ -90,12 +91,14 @@ public class MainEntryClass {
 //		}
 		
 		DesignerDAO designerDao = new DesignerDAO();
+		designerDao.connect();
 		List<Designer> designerIds = designerDao.getDesignersByNames(designers);
 		
 		System.out.println("Enter in the names of the Mechanics to search by, separated by commas");
 		String[] mechanicNames = in.nextLine().split(", ");
 		
 		MechanicDAO mechanicDao = new MechanicDAO();
+		mechanicDao.connect();
 		List<Mechanic> mechanics = mechanicDao.getMechanicsByName(mechanicNames);
 		
 	}

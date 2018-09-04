@@ -16,7 +16,7 @@ import com.noahfields.Models.Designer;
 import com.noahfields.Models.Game;
 
 @Repository
-public class DesignerDAO {
+public class DesignerDAO extends GeneralDAO{
 
 	private static final String GETDESIGNERSFORGAME = "SELECT des.id, des.First_name, des.Last_name, des.Website FROM Designers des join Game_Designers gd on des.id = gd.Designer_ID WHERE gd.Game_ID = ?";
 	
@@ -54,27 +54,13 @@ public class DesignerDAO {
 		
 		String SQL = SQLBase + whereClause.toString();
 		
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		if(conn == null) {
 			return null;
 		}
 	
 		List<Designer> designers = null;
 		try {
-			PreparedStatement ps = conn.prepareStatement(SQL);
+			ps = conn.prepareStatement(SQL);
 			for (int i = 1; i <= names.size(); ++i) {
 				String name = names.get(i-1);
 				ps.setString(i, name);
@@ -89,7 +75,9 @@ public class DesignerDAO {
 				designer.setWebsite(rs.getString(4));
 				designers.add(designer);
 			}
-			conn.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -103,27 +91,13 @@ public class DesignerDAO {
 	 */
 	public List<Designer> getDesignersForGame(Game game){
 		
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		if(conn == null) {
 			return null;
 		}
 	
 		List<Designer> designers = null;
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETDESIGNERSFORGAME);
+			ps = conn.prepareStatement(GETDESIGNERSFORGAME);
 			ps.setInt(1, game.getId());
 			ResultSet rs = ps.executeQuery();
 			designers = new ArrayList<Designer>();
@@ -135,7 +109,9 @@ public class DesignerDAO {
 				designer.setWebsite(rs.getString(4));
 				designers.add(designer);
 			}
-			conn.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

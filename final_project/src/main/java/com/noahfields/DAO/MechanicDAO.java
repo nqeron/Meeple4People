@@ -16,7 +16,7 @@ import com.noahfields.Models.Game;
 import com.noahfields.Models.Mechanic;
 
 @Repository
-public class MechanicDAO {
+public class MechanicDAO extends GeneralDAO{
 
 	private static final String GETMECHANICSBYNAMEBASE = "SELECT * FROM Mechanics WHERE UPPER(Name) in ";
 	private static final String GETMECHANICSBYGAMEID = "SELECT mech.id, mech.Name, mech.Description FROM Mechanics mech join Game_Mechanics gm on mech.id = gm.Mechanic_ID WHERE gm.Game_ID = ?";
@@ -43,20 +43,6 @@ public class MechanicDAO {
 		}
 		SQL += mechs.toString();
 		
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		if(conn == null) {
 			return null;
 		}
@@ -79,7 +65,9 @@ public class MechanicDAO {
 				mechanic.setDescription(rs.getString(3));
 				mechanics.add(mechanic);
 			}
-			conn.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -94,20 +82,6 @@ public class MechanicDAO {
 	 */
 	public List<Mechanic> getMechanicsForGame(Game game){
 		//gets the mechanics for a specified game
-		
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return null;
@@ -128,7 +102,9 @@ public class MechanicDAO {
 				mechanic.setDescription(rs.getString(3));
 				mechanics.add(mechanic);
 			}
-			conn.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -142,19 +118,6 @@ public class MechanicDAO {
 	 * @return mechanic for given id
 	 */
 	public Mechanic getMechanicByID(int id) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return null;
@@ -173,7 +136,9 @@ public class MechanicDAO {
 				mechanic.setName(rs.getString(2));
 				mechanic.setDescription(rs.getString(3));
 			}
-			conn.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

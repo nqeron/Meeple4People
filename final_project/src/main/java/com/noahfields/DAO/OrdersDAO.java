@@ -14,7 +14,7 @@ import com.noahfields.Models.Game;
 import com.noahfields.Models.StockItem;
 
 @Repository
-public class OrdersDAO {
+public class OrdersDAO extends GeneralDAO{
 	
 	private static final String INSERTORDERFORCUSTOMER = "INSERT INTO Orders (Order_ID, Item_ID, Customer_ID, Date_Shipped) VALUES (?, ?, ?, NULL)";
 	private static final String GETNEXTORDERID = "SELECT MAX(Order_ID) + 1 FROM Orders";
@@ -22,19 +22,6 @@ public class OrdersDAO {
 			+ " JOIN Stock item on game.id = item.Game_ID JOIN Orders ord on item.Item_ID = ord.Item_ID WHERE ord.Order_ID = ?";
 
 	public int addItemsToOrderForCustomer(List<StockItem> rentalsItems, int customerID) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return -1;
@@ -43,7 +30,7 @@ public class OrdersDAO {
 		int id = -1;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETNEXTORDERID);
+			ps = conn.prepareStatement(GETNEXTORDERID);
 			ResultSet rs = ps.executeQuery();
 			int nextId = 0;
 			if(rs.next()) {
@@ -68,7 +55,10 @@ public class OrdersDAO {
 			if(placed) {
 				id = nextId;
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -79,28 +69,13 @@ public class OrdersDAO {
 
 	public List<Game> getGamesForOrder(int orderID){
 		
-		Connection conn = null;
-		
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		if(conn == null) {
 			return null;
 		}
 		
 		List<Game> games = null;
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETGAMESFORORDER);
+			ps = conn.prepareStatement(GETGAMESFORORDER);
 			ps.setInt(1, orderID);
 			
 			ResultSet rs = ps.executeQuery();
@@ -115,7 +90,10 @@ public class OrdersDAO {
 				game.setAverage_Rating(rs.getDouble(6));
 				games.add(game);
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

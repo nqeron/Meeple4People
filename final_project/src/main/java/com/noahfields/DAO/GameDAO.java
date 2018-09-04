@@ -17,7 +17,7 @@ import com.noahfields.Models.Mechanic;
 import com.noahfields.Models.Publisher;
 
 @Repository
-public class GameDAO {
+public class GameDAO extends GeneralDAO {
 
 	private static final String GETTOPRATEDGAMES = "Select * From topRated Where R BETWEEN ? AND ?";
 	private static final String GETGAMEBYID = "SELECT * FROM Games Where id = ?";
@@ -25,20 +25,6 @@ public class GameDAO {
 	private static final String GETNUMGAMES = "SELECT Count(id) FROM Games";
 	
 	public List<Game> searchForGames(String name, int[] years, double lowCost, double highCost, double lowRating, double highRating, List<Designer> designers, List<Mechanic> mechanics, List<Publisher> publishers ){
-		
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return null;
@@ -59,7 +45,9 @@ public class GameDAO {
 				game.setAverage_Rating(rs.getDouble(6));
 				games.add(game);
 			}
-			conn.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -224,19 +212,6 @@ public class GameDAO {
 	}
 
 	public List<Game> getRecommendedGames(int start){
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return null;
@@ -261,7 +236,9 @@ public class GameDAO {
 				//ignore the row number in column 7
 				games.add(game);
 			}
-			conn.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -273,19 +250,6 @@ public class GameDAO {
 
 
 	public Game getGameByID(int id) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return null;
@@ -306,7 +270,9 @@ public class GameDAO {
 				game.setCost_of_game(rs.getDouble(5));
 				game.setAverage_Rating(rs.getDouble(6));
 			}
-			conn.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -315,72 +281,7 @@ public class GameDAO {
 		return game;
 	}
 
-
-
-	public List<Game> searchForGamesByName(String name) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		if(conn == null) {
-			return null;
-		}
-		
-		List<Game> games = null;
-		
-		try {
-			PreparedStatement ps = conn.prepareStatement(GETGAMESBYNAME);
-			ps.setString(1, "%"+name+"%");
-			
-			ResultSet rs = ps.executeQuery();
-			
-			games = new ArrayList<Game>();
-			while(rs.next()) {
-				Game game = new Game();
-				game.setId(rs.getInt(1));
-				game.setName(rs.getString(2));
-				game.setDescription(rs.getString(3));
-				game.setYear_published(rs.getInt(4));
-				game.setCost_of_game(rs.getDouble(5));
-				game.setAverage_Rating(rs.getDouble(6));
-				games.add(game);
-			}
-			conn.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return games;
-	}
-
-
-
 	public int getNumGames() {
-		Connection conn = null;
-		
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return 0;
@@ -396,7 +297,9 @@ public class GameDAO {
 				numGames = rs.getInt(1);
 			}
 			
-			conn.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

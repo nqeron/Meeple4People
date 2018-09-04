@@ -21,10 +21,14 @@ public class PictureService {
 
 		Map<Game, Picture> gamePictures = new HashMap<Game, Picture>();
 		
+		pictureDAO.setKeepOpen(true);
+		pictureDAO.connect();
 		for(Game game: games) {
 			Picture picture = pictureDAO.getPictureOfSizeForGame(size, game.getId());
 			gamePictures.put(game, picture);
 		}
+		
+		pictureDAO.dispose();
 		
 		return gamePictures;
 		
@@ -32,6 +36,7 @@ public class PictureService {
 	}
 
 	public Picture getPictureForGameofSize(int gameId, int size) {
+		pictureDAO.connect();
 		return pictureDAO.getPictureOfSizeForGame(size, gameId);
 	}
 

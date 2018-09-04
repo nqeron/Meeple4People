@@ -15,10 +15,12 @@ public class ZipcodeService {
 	ZipcodeDAO zipcodeDao;
 	
 	public Zipcode getZipcode(int zipcode) {
+		zipcodeDao.connect();
 		return zipcodeDao.getZipcode(zipcode);
 	}
 
 	public List<Zipcode> getAllZips() {
+		zipcodeDao.connect();
 		return zipcodeDao.getAllZips();
 	}
 

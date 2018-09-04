@@ -16,10 +16,12 @@ public class MechanicService {
 	MechanicDAO mechanicDao;
 	
 	public List<Mechanic> getMechanicsForGame(Game game) {
+		mechanicDao.connect();
 		return mechanicDao.getMechanicsForGame(game);
 	}
 
 	public Mechanic getMechanicByID(int id) {
+		mechanicDao.connect();
 		return mechanicDao.getMechanicByID(id);
 	}
 

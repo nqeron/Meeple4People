@@ -16,6 +16,7 @@ public class DesignerService {
 	DesignerDAO designerDao;
 
 	public List<Designer> getDesignersForGame(Game game) {
+		designerDao.connect();
 		return designerDao.getDesignersForGame(game);
 	}
 	

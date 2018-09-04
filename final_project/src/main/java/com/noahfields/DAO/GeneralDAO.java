@@ -8,15 +8,29 @@ import java.sql.SQLException;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class GeneralDAO {
-
-	private static final String ROLLBACK = "ROLLBACK";
-	private static final String STARTTRANSACTION = "Start Transaction";
-
-	public void rollback() {
-		Connection conn = null;
+abstract public class GeneralDAO {
+	protected Connection conn;
+	protected boolean autocommit;
+	protected boolean keepOpen;
+	protected PreparedStatement ps;
+	
+	public GeneralDAO() {
+		this.autocommit = true;
+		this.keepOpen = false;
+	}
+	
+	public void setAutoCommit(boolean autoCommit) {
+		this.autocommit = autoCommit;
+	}
+	
+	public void setKeepOpen(boolean keepOpen) {
+		this.keepOpen = keepOpen;
+	}
+	
+	public void connect() {
 		try {
-			 conn = new OracleConnection().getConnection();
+			conn = new OracleConnection().getConnection();
+			conn.setAutoCommit(autocommit);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -27,50 +41,47 @@ public class GeneralDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		if (conn == null) {
-			return;
-		}
-		
-		try {
-			PreparedStatement ps = conn.prepareStatement(ROLLBACK);
-			ps.executeQuery();
-			conn.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 	}
 
-	public void startTransaction() {
-		Connection conn = null;
+	public void rollback() {
+		if (!this.autocommit) {
+			if(conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public void commit() {
 		try {
-			 conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			conn.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		if (conn == null) {
-			return;
+	}
+	
+	public void dispose() {
+		if (conn != null) {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		
-		try {
-			PreparedStatement ps = conn.prepareStatement(STARTTRANSACTION);
-			ps.executeQuery();
-			conn.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(ps != null) {
+			try {
+				ps.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		
 	}
 
 }

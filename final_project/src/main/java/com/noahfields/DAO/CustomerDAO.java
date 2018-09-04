@@ -16,7 +16,7 @@ import com.noahfields.Models.Customer;
 import com.noahfields.Models.Designer;
 
 @Repository
-public class CustomerDAO {
+public class CustomerDAO extends GeneralDAO{
 
 	private static final String ADDCUSTOMER = "INSERT INTO Customers (Last_Name, First_name, Username, E_mail, Password, Salt, Address_Line_1, Address_Line_2, Zipcode, Phone, Member_Status, Join_Date, Balance) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String REGISTERCUSTOMER = "INSERT INTO Customers (Username, E_mail, Password, Salt, Member_Status, Join_Date, Balance) VALUES (?,?,?,?,?,?,?)";
@@ -30,20 +30,7 @@ public class CustomerDAO {
 	 * @param customer: customer data to add to database (id is auto generated)
 	 * @return whether or not customer was added to the database
 	 */
-	public boolean addCustomer(Customer customer) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public boolean addCustomer(Customer customer){
 		
 		if(conn == null) {
 			return false;
@@ -51,7 +38,7 @@ public class CustomerDAO {
 	
 		boolean created = false;
 		try {
-			PreparedStatement ps = conn.prepareStatement(ADDCUSTOMER);
+			ps = conn.prepareStatement(ADDCUSTOMER);
 			ps.setString(1, customer.getFirst_name());
 			ps.setString(2, customer.getLast_name());
 			ps.setString(3, customer.getUsername());
@@ -78,7 +65,10 @@ public class CustomerDAO {
 				created = true;
 			}
 			
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -95,19 +85,6 @@ public class CustomerDAO {
 	 * @return whether or not the customer details were updated in the database
 	 */
 	public int updateCustomer(Customer customer) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return -1;
@@ -115,7 +92,7 @@ public class CustomerDAO {
 	
 		int created = -2;
 		try {
-			PreparedStatement ps = conn.prepareStatement(UPDATECUSTOMER);
+			ps = conn.prepareStatement(UPDATECUSTOMER);
 			ps.setString(1, customer.getFirst_name());
 			ps.setString(2, customer.getLast_name());
 			ps.setString(3, customer.getE_mail());
@@ -134,7 +111,9 @@ public class CustomerDAO {
 				created = -3;
 			}
 			
-			conn.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			created = e.getErrorCode();
@@ -152,19 +131,6 @@ public class CustomerDAO {
 	 * @return customer info for given username (w/o password or salt)
 	 */
 	public Customer getCustomerByUsername(String username) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return null;
@@ -172,7 +138,7 @@ public class CustomerDAO {
 		
 		Customer customer = null;
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETCUSTOMERBYUSERNAME);
+			ps = conn.prepareStatement(GETCUSTOMERBYUSERNAME);
 			ps.setString(1, username);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
@@ -190,7 +156,9 @@ public class CustomerDAO {
 				customer.setBalance(rs.getDouble(11));
 				customer.setId(rs.getInt(12));
 			}
-			conn.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -206,19 +174,6 @@ public class CustomerDAO {
 	 * @return whether or not the password is correct for the given user
 	 */
 	public boolean verifyUser(String username, String password) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return false;
@@ -227,7 +182,7 @@ public class CustomerDAO {
 		boolean verified = false;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(VERIFYUSER);
+			ps = conn.prepareStatement(VERIFYUSER);
 			ps.setString(1, username);
 			
 			ResultSet rs = ps.executeQuery();
@@ -237,7 +192,9 @@ public class CustomerDAO {
 				String hashedPass = Encryption.getPassword(password, Encryption.getBytesFromString(salt));
 				verified = hashedPass.equals(pass);
 			}
-			conn.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -256,19 +213,6 @@ public class CustomerDAO {
 	 * @return whether or not password was changed for the user
 	 */
 	public boolean changePassword(String username, String password) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return false;
@@ -277,7 +221,7 @@ public class CustomerDAO {
 		boolean changed = false;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(CHANGEUSERPASSWORD);
+			ps = conn.prepareStatement(CHANGEUSERPASSWORD);
 			byte[] salt = Encryption.getSalt();
 			ps.setString(1, Encryption.getPassword(password, salt));
 			ps.setString(2, Encryption.getHexBinaryString(salt));
@@ -287,7 +231,9 @@ public class CustomerDAO {
 			if (update > 0) {
 				changed = true;
 			}
-			conn.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -301,19 +247,6 @@ public class CustomerDAO {
 
 
 	public Customer getCustomerByEmail(String email) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return null;
@@ -321,7 +254,7 @@ public class CustomerDAO {
 		
 		Customer customer = null;
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETCUSTOMERBYEMAIL);
+			ps = conn.prepareStatement(GETCUSTOMERBYEMAIL);
 			ps.setString(1, email);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
@@ -339,7 +272,9 @@ public class CustomerDAO {
 				customer.setBalance(rs.getDouble(11));
 				customer.setId(rs.getInt(12));
 			}
-			conn.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -354,19 +289,6 @@ public class CustomerDAO {
 	 * @return id of customer registered
 	 */
 	public int registerUser(Customer customer) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return -1;
@@ -400,7 +322,9 @@ public class CustomerDAO {
 				}
 			}
 			
-			conn.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

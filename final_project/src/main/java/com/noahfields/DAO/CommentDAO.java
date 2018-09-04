@@ -15,24 +15,19 @@ import org.springframework.stereotype.Repository;
 import com.noahfields.Models.Comment;
 
 @Repository
-public class CommentDAO {
+public class CommentDAO extends GeneralDAO{
 	
 	private static final String GETTOPCOMMENTSFORGAME = "SELECT Game_ID, Customer_ID, Comment_Text, Rating, Comment_Date, ROW_NUMBER() OVER (order by Rating DESC) R FROM Game_Comments WHERE Game_ID = ?";
 	private static final String GETSTARTCOMMENTS = "SELECT * FROM (" + GETTOPCOMMENTSFORGAME + ") WHERE R BETWEEN ? and ?";
 	private static final String HASCOMMENTFORRENTAL = "SELECT * FROM Game_Comments gc WHERE gc.Customer_ID = ? AND gc.Game_ID = ?";
 	private static final String INSERTREVIEW = "INSERT INTO Game_Comments VALUES (?, ?, ?, ?, ?)";
 	
+	public CommentDAO() {
+		super();
+	}
+	
+	
 	public List<Comment> getCommentsForGame(int id, int start){
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return null;
@@ -40,7 +35,7 @@ public class CommentDAO {
 		
 		List<Comment> comments = null;
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETSTARTCOMMENTS);
+			ps = conn.prepareStatement(GETSTARTCOMMENTS);
 			ps.setInt(1, id);
 			ps.setInt(2, start);
 			ps.setInt(3, start+6);
@@ -57,7 +52,11 @@ public class CommentDAO {
 				comment.setComment_date(rs.getDate(5));
 				comments.add(comment);
 			}
-			conn.close();
+			rs.close();
+			ps.close();
+			if(!keepOpen) {
+			this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -67,20 +66,6 @@ public class CommentDAO {
 	}
 
 	public boolean customerHasCommentsForGame(int customerId, int gameId) {
-		Connection conn = null;
-		
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return false;
@@ -89,7 +74,7 @@ public class CommentDAO {
 		boolean hasComment = false;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(HASCOMMENTFORRENTAL);
+			ps = conn.prepareStatement(HASCOMMENTFORRENTAL);
 			ps.setInt(1, customerId);
 			ps.setInt(2, gameId);
 			
@@ -98,7 +83,10 @@ public class CommentDAO {
 			if(rs.next()) {
 				hasComment = true;
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -108,20 +96,6 @@ public class CommentDAO {
 	}
 
 	public boolean addReviewForCustomerToGame(int customerId, int gameId, double ratingVal, String commentText) {
-		Connection conn = null;
-		
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return false;
@@ -130,7 +104,7 @@ public class CommentDAO {
 		boolean added = false;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(INSERTREVIEW);
+			ps = conn.prepareStatement(INSERTREVIEW);
 			ps.setInt(1, gameId);
 			ps.setInt(2, customerId);
 			ps.setString(3, commentText);
@@ -141,13 +115,57 @@ public class CommentDAO {
 			if(updated > 0 && updated != PreparedStatement.EXECUTE_FAILED) {
 				added = true;
 			}
-			conn.close();
+			ps.close();
+//			if(this.autocommit) {
+				//this.commit();
+				if(!keepOpen) {
+					this.dispose();
+				}
+//			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		return added;
+	}
+
+
+	public Comment getCommentByCustomerAndGame(int customerId, int gameId) {
+		
+		if(conn == null) {
+			return null;
+		}
+		
+		Comment comment = null;
+		
+		try {
+			ps = conn.prepareStatement(HASCOMMENTFORRENTAL);
+			ps.setInt(1, customerId);
+			ps.setInt(2, gameId);
+			
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				comment = new Comment();
+				comment.setGameId(rs.getInt(1));
+				comment.setCustomerId(rs.getInt(2));
+				comment.setComment_text(rs.getString(3));
+				comment.setRating(rs.getDouble(4));
+				comment.setComment_date(rs.getDate(5));
+			}
+			
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return comment;
 	}
 
 }

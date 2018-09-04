@@ -13,26 +13,12 @@ import org.springframework.stereotype.Repository;
 import com.noahfields.Models.Zipcode;
 
 @Repository
-public class ZipcodeDAO {
+public class ZipcodeDAO extends GeneralDAO{
 
 	private static final String GETZIPCODE = "SELECT * FROM Zipcodes WHERE Zipcode = ?";
 	private static final String GETALLZIPS = "SELECT * FROM Zipcodes";
 	
 	public Zipcode getZipcode(int zip) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		if(conn == null) {
 			return null;
 		}
@@ -40,7 +26,7 @@ public class ZipcodeDAO {
 		Zipcode zipcode = null;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETZIPCODE);
+			ps = conn.prepareStatement(GETZIPCODE);
 			ps.setInt(1, zip);
 			
 			ResultSet rs = ps.executeQuery();
@@ -51,7 +37,10 @@ public class ZipcodeDAO {
 				zipcode.setState(rs.getString(3));
 				zipcode.setCountry(rs.getString(4));
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -60,19 +49,6 @@ public class ZipcodeDAO {
 	}
 
 	public List<Zipcode> getAllZips() {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return null;
@@ -80,7 +56,7 @@ public class ZipcodeDAO {
 		
 		List<Zipcode> zips = null;
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETALLZIPS);
+			ps = conn.prepareStatement(GETALLZIPS);
 			
 			ResultSet rs = ps.executeQuery();
 			zips = new ArrayList<Zipcode>();
@@ -92,7 +68,10 @@ public class ZipcodeDAO {
 				zip.setCountry(rs.getString(4));
 				zips.add(zip);
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -20,7 +20,7 @@ import com.noahfields.Models.Rental;
 import com.noahfields.Models.StockItem;
 
 @Repository
-public class RentalsDAO {
+public class RentalsDAO extends GeneralDAO{
 
 	private static final String ADDITEMSTORENTAL = "INSERT INTO Rentals (Customer_ID, Item_ID, Date_Rented, Due_Date) Values (?, ?, ?, ?)";
 	private static final String GETNEXTRENTALSID = "SELECT MAX(id)+1 From Rentals";
@@ -32,19 +32,6 @@ public class RentalsDAO {
 	private static final String GETNUMITEMSRENTEDFORCUSTOMER = "SELECT Count(Item_ID) FROM Rentals WHERE Customer_ID = ?";
 
 	public boolean addItemsToRentalsForCustomer(List<StockItem> rentalsItems, int customerID) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return false;
@@ -54,7 +41,7 @@ public class RentalsDAO {
 		
 		try {
 			String[] rental_id = {"id"};
-			PreparedStatement ps = conn.prepareStatement(ADDITEMSTORENTAL, rental_id);
+			ps = conn.prepareStatement(ADDITEMSTORENTAL, rental_id);
 			for(StockItem items: rentalsItems) {
 				ps.setInt(1, customerID);
 				ps.setInt(2, items.getItem_id());
@@ -74,7 +61,10 @@ public class RentalsDAO {
 					break;
 				}
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,20 +74,6 @@ public class RentalsDAO {
 	}
 
 	public Map<Game, Rental> getGamesRentedForCustomer(int customerID){
-		Connection conn = null;
-		
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return null;
@@ -105,7 +81,7 @@ public class RentalsDAO {
 		
 		Map<Game, Rental> gamesRented = null;
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETGAMESRENTEDFORCUSTOMER);
+			ps = conn.prepareStatement(GETGAMESRENTEDFORCUSTOMER);
 			ps.setInt(1, customerID);
 			
 			ResultSet rs = ps.executeQuery();
@@ -126,7 +102,10 @@ public class RentalsDAO {
 				
 				gamesRented.put(game, rental);
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -136,20 +115,6 @@ public class RentalsDAO {
 	}
 
 	public boolean removeRental(int rentalId) {
-Connection conn = null;
-		
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return false;
@@ -158,7 +123,7 @@ Connection conn = null;
 		boolean removed = false;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(REMOVERENTALBYID);
+			ps = conn.prepareStatement(REMOVERENTALBYID);
 			ps.setInt(1, rentalId);
 			
 			int deleted = ps.executeUpdate();
@@ -166,7 +131,10 @@ Connection conn = null;
 			if(deleted < 0 || deleted == PreparedStatement.EXECUTE_FAILED) {
 				removed = false;
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -176,20 +144,6 @@ Connection conn = null;
 	}
 
 	public Game getGameFromRental(int rentalId) {
-		Connection conn = null;
-		
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return null;
@@ -198,7 +152,7 @@ Connection conn = null;
 		Game game = null;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETGAMEFROMRENTAL);
+			ps = conn.prepareStatement(GETGAMEFROMRENTAL);
 			ps.setInt(1, rentalId);
 			
 			ResultSet rs = ps.executeQuery();
@@ -212,7 +166,10 @@ Connection conn = null;
 				game.setCost_of_game(rs.getDouble(5));
 				game.setAverage_Rating(rs.getDouble(6));
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -222,20 +179,6 @@ Connection conn = null;
 	}
 
 	public int getNumItemsRentedForCustomer(int id) {
-		Connection conn = null;
-		
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return -1;
@@ -244,7 +187,7 @@ Connection conn = null;
 		int numItems = -1;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETNUMITEMSRENTEDFORCUSTOMER);
+			ps = conn.prepareStatement(GETNUMITEMSRENTEDFORCUSTOMER);
 			ps.setInt(1, id);
 			
 			ResultSet rs = ps.executeQuery();
@@ -252,7 +195,10 @@ Connection conn = null;
 			if(rs.next()) {
 				numItems = rs.getInt(1);
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

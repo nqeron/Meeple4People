@@ -17,8 +17,8 @@ public class RentalsService {
 	@Autowired
 	RentalsDAO rentalsDAO;
 	
-	@Autowired
-	GeneralDAO generalDAO;
+//	@Autowired
+//	GeneralDAO generalDAO;
 	
 	@Autowired
 	ShoppingCartDAO shCartDAO;
@@ -29,20 +29,38 @@ public class RentalsService {
 
 	public boolean returnRental(int rentalId) {
 		
-		//generalDAO.startTransaction();
+		//rentalsDAO
+		rentalsDAO.setAutoCommit(false);
+		rentalsDAO.setKeepOpen(true);
+		rentalsDAO.connect();
+		
+		//shCartDAO
+		shCartDAO.setAutoCommit(false);
+		shCartDAO.setKeepOpen(true);
+		shCartDAO.connect();
 		
 		boolean changed = shCartDAO.updateRentalItemsToInStock(rentalId);
 		if(!changed) {
-			generalDAO.rollback();
+			shCartDAO.rollback();
+			shCartDAO.dispose();
 			return false;
 		}
 		
 		boolean remove = rentalsDAO.removeRental(rentalId);
 		if(!remove) {
-			generalDAO.rollback();
+			shCartDAO.rollback();
+			shCartDAO.dispose();
+			
+			rentalsDAO.rollback();
+			rentalsDAO.dispose();
 			return false;
 		}
 		
+		rentalsDAO.commit();
+		rentalsDAO.dispose();
+		
+		shCartDAO.commit();
+		shCartDAO.dispose();
 		return true;
 	}
 

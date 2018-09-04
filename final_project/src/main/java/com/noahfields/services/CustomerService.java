@@ -13,22 +13,27 @@ public class CustomerService {
 	CustomerDAO customerDao;
 	
 	public Customer getCustomerByUsername(String username) {
+		customerDao.connect();
 		return customerDao.getCustomerByUsername(username);
 	}
 
 	public Customer getCustomerByEmail(String email) {
+		customerDao.connect();
 		return customerDao.getCustomerByEmail(email);
 	}
 
 	public int registerUser(Customer customer) {
+		customerDao.connect();
 		return customerDao.registerUser(customer);
 	}
 
 	public boolean verifyUser(String username, String password) {
+		customerDao.connect();
 		return customerDao.verifyUser(username, password);
 	}
 
 	public int updateCustomer(Customer cust) {
+		customerDao.connect();
 		return customerDao.updateCustomer(cust);
 	}
 

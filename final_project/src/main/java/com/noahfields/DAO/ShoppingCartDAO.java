@@ -14,7 +14,7 @@ import com.noahfields.Models.Game;
 import com.noahfields.Models.StockItem;
 
 @Repository
-public class ShoppingCartDAO {
+public class ShoppingCartDAO extends GeneralDAO{
 
 	private static final String GETITEMSINCARTFORCUSTOMER = "SELECT item.Item_ID, item.Game_ID, item.Status_ID, item.Serial_Number, item.Acquisition_Date, item.Condition_ID, item.Last_Examined"
 			+ " FROM Stock item join Shopping_Cart sc on item.Item_ID = sc.Item_ID WHERE sc.Customer_ID = ?";
@@ -33,19 +33,6 @@ public class ShoppingCartDAO {
 	private static final String GETNUMITEMSINCARTFORCUSTOMER = "SELECT Count(Item_ID) FROM Shopping_Cart WHERE Customer_ID = ?";
 	
 	public List<StockItem> getItemsInCartForCustomer(int customer_id){
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return null;
@@ -53,7 +40,7 @@ public class ShoppingCartDAO {
 		
 		List<StockItem> stockItems = null;
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETITEMSINCARTFORCUSTOMER);
+			ps = conn.prepareStatement(GETITEMSINCARTFORCUSTOMER);
 			ps.setInt(1, customer_id);
 			
 			ResultSet rs = ps.executeQuery();
@@ -71,7 +58,10 @@ public class ShoppingCartDAO {
 				stockItems.add(stockItem);
 				
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -81,19 +71,6 @@ public class ShoppingCartDAO {
 	}
 
 	public Game getGameForItem(int item_id) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return null;
@@ -102,7 +79,7 @@ public class ShoppingCartDAO {
 		Game game = null;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETGAMEFORITEM);
+			ps = conn.prepareStatement(GETGAMEFORITEM);
 			ps.setInt(1, item_id);
 			
 			ResultSet rs = ps.executeQuery();
@@ -115,7 +92,10 @@ public class ShoppingCartDAO {
 				game.setCost_of_game(rs.getDouble(5));
 				game.setAverage_Rating(rs.getDouble(6));
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -125,19 +105,6 @@ public class ShoppingCartDAO {
 	}
 
 	public boolean addItemToShoppingCartForCustomer(int item_id, int customer_id) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return false;
@@ -145,7 +112,7 @@ public class ShoppingCartDAO {
 		
 		boolean added = false;
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETNEXTSHOPPINGCARTID);
+			ps = conn.prepareStatement(GETNEXTSHOPPINGCARTID);
 			ResultSet rs = ps.executeQuery();
 			int nextid = 0;
 			if(rs.next()) {
@@ -161,7 +128,10 @@ public class ShoppingCartDAO {
 			if(executed > 0) {
 				added = true;
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -172,20 +142,6 @@ public class ShoppingCartDAO {
 
 	public StockItem getNextAvailableStockItemForGame(int game_id) {
 		
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		if(conn == null) {
 			return null;
 		}
@@ -193,7 +149,7 @@ public class ShoppingCartDAO {
 		StockItem stockItem = null;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETNEXTAVAILABLESTOCKITEMFORGAME);
+			ps = conn.prepareStatement(GETNEXTAVAILABLESTOCKITEMFORGAME);
 			ps.setInt(1, game_id);
 			
 			ResultSet rs = ps.executeQuery();
@@ -207,7 +163,10 @@ public class ShoppingCartDAO {
 				stockItem.setCondition_id(rs.getInt(6));
 				stockItem.setLast_examined(rs.getDate(7));
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -217,19 +176,6 @@ public class ShoppingCartDAO {
 	}
 
 	public boolean removeItemFromShoppingCart(int itemId, int customerId) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return false;
@@ -238,7 +184,7 @@ public class ShoppingCartDAO {
 		boolean removed = false;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(REMOVEITEMFROMSHOPPINGCART);
+			ps = conn.prepareStatement(REMOVEITEMFROMSHOPPINGCART);
 			ps.setInt(1, customerId);
 			ps.setInt(2, itemId);
 
@@ -247,7 +193,10 @@ public class ShoppingCartDAO {
 			if(updated > 0) {
 				removed = true;
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -259,19 +208,6 @@ public class ShoppingCartDAO {
 	
 
 	public boolean updateItemsInStockToRented(List<StockItem> rentalsItems) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return false;
@@ -280,7 +216,7 @@ public class ShoppingCartDAO {
 		boolean updated = false;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(UPDATEITEMSTATUSTORENTED);
+			ps = conn.prepareStatement(UPDATEITEMSTATUSTORENTED);
 			for(StockItem item: rentalsItems) {
 				ps.setInt(1, item.getItem_id());
 				ps.addBatch();
@@ -293,7 +229,10 @@ public class ShoppingCartDAO {
 					break;
 				}
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -303,20 +242,6 @@ public class ShoppingCartDAO {
 	}
 
 	public boolean removeItemsFromShoppingCart(List<StockItem> rentalsItems, int customerID) {
-		// TODO Auto-generated method stub
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return false;
@@ -325,7 +250,7 @@ public class ShoppingCartDAO {
 		boolean removed = false;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(REMOVEITEMFROMSHOPPINGCART);
+			ps = conn.prepareStatement(REMOVEITEMFROMSHOPPINGCART);
 			for(StockItem item: rentalsItems) {
 				ps.setInt(1, customerID);
 				ps.setInt(2, item.getItem_id());
@@ -339,7 +264,10 @@ public class ShoppingCartDAO {
 					break;
 				}
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -349,19 +277,6 @@ public class ShoppingCartDAO {
 	}
 
 	public boolean updateRentalItemsToInStock(int rentalId) {
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return false;
@@ -370,7 +285,7 @@ public class ShoppingCartDAO {
 		boolean updated = false;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(UPDATERENTALITEMSTATUSTOINSTOCK);
+			ps = conn.prepareStatement(UPDATERENTALITEMSTATUSTOINSTOCK);
 			ps.setInt(1, rentalId);
 			
 			int changed = ps.executeUpdate();
@@ -378,7 +293,10 @@ public class ShoppingCartDAO {
 			if(changed < 0 || changed == PreparedStatement.EXECUTE_FAILED) {
 				updated = false;
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -388,20 +306,6 @@ public class ShoppingCartDAO {
 	}
 
 	public int getNumItemsInCartForCustomer(int id) {
-		Connection conn = null;
-		
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		if(conn == null) {
 			return -1;
@@ -410,7 +314,7 @@ public class ShoppingCartDAO {
 		int numItems = -1;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETNUMITEMSINCARTFORCUSTOMER);
+			ps = conn.prepareStatement(GETNUMITEMSINCARTFORCUSTOMER);
 			ps.setInt(1, id);
 			
 			ResultSet rs = ps.executeQuery();
@@ -418,7 +322,10 @@ public class ShoppingCartDAO {
 			if(rs.next()) {
 				numItems = rs.getInt(1);
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

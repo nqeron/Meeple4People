@@ -30,10 +30,12 @@ public class ShoppingCartService {
 	
 	
 	public List<StockItem> getItemsInCartForCustomer(int customer_id){
+		shCartDAO.connect();
 		return shCartDAO.getItemsInCartForCustomer(customer_id);
 	}
 	
 	public StockItem getNextAvailableStockItemForGame(int gameId) {
+		shCartDAO.connect();
 		return shCartDAO.getNextAvailableStockItemForGame(gameId);
 	}
 	
@@ -42,6 +44,10 @@ public class ShoppingCartService {
 			return CUSTOMERISSUSPENDED;
 		}
 		
+		shCartDAO.setKeepOpen(true);
+		shCartDAO.connect();
+		rentalsDAO.connect();
+		
 		int numItemsInCart = shCartDAO.getNumItemsInCartForCustomer(customer.getId());
 		int numItemsRented = rentalsDAO.getNumItemsRentedForCustomer(customer.getId());
 		
@@ -49,19 +55,25 @@ public class ShoppingCartService {
 			return EXCEEDMAXNUMGAMES;
 		}
 		boolean added = shCartDAO.addItemToShoppingCartForCustomer(item.getItem_id(), customer.getId());
+		
+		shCartDAO.dispose();
 		return added? 1 : COUlDNOTBEADDED;
 	}
 
 	public Map<StockItem, Game> getGamesInCartForCustomer(List<StockItem> customerItems) {
+		shCartDAO.setKeepOpen(true);
+		shCartDAO.connect();
 		Map<StockItem, Game> gameItems = new HashMap<StockItem, Game>();
 		for(StockItem si: customerItems) {
 			Game game = shCartDAO.getGameForItem(si.getItem_id());
 			gameItems.put(si, game);
 		}
+		shCartDAO.dispose();
 		return gameItems;
 	}
 
 	public boolean removeItemFromShoppingCart(int itemId, int customerId) {
+		shCartDAO.connect();
 		return shCartDAO.removeItemFromShoppingCart(itemId,customerId);
 	}
 

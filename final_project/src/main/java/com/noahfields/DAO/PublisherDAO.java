@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.noahfields.Models.Publisher;
 
 @Repository
-public class PublisherDAO {
+public class PublisherDAO extends GeneralDAO{
 	
 	private static final String GETPUBLISHERFORGAMEID = "SELECT pub.id, pub.Name, pub.Website FROM Publishers pub join Game_Publishers gp on pub.id = gp.Publisher_ID WHERE gp.Game_ID = ?";
 	private static final String GETPUBLISHERBYNAMEBASE = "SELECT * FROM Publishers";
@@ -27,27 +27,13 @@ public class PublisherDAO {
 	 */
 	public List<Publisher> getPublisherForGameID(int id){
 		
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		if(conn == null) {
 			return null;
 		}
 		
 		List<Publisher> publishers = null;
 		try {
-			PreparedStatement ps = conn.prepareStatement(GETPUBLISHERFORGAMEID);
+			ps = conn.prepareStatement(GETPUBLISHERFORGAMEID);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			
@@ -59,7 +45,10 @@ public class PublisherDAO {
 				publisher.setWebsite(rs.getString(3));
 				publishers.add(publisher);
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -71,20 +60,6 @@ public class PublisherDAO {
 	public List<Publisher> getPublishersByName(String[] publishers) {
 		if(publishers == null || publishers.length <=0 || Arrays.equals(publishers,new String[] {""})) {
 			return null;
-		}
-		
-		Connection conn = null;
-		try {
-			conn = new OracleConnection().getConnection();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		if(conn == null) {
@@ -101,7 +76,7 @@ public class PublisherDAO {
 				LikeClause.add("UPPER(Name) LIKE UPPER(?)");
 			}
 			//WHERE UPPER(Name) LIKE UPPER(?)
-			PreparedStatement ps = conn.prepareStatement(GETPUBLISHERBYNAMEBASE + WHERE + LikeClause.toString());
+			ps = conn.prepareStatement(GETPUBLISHERBYNAMEBASE + WHERE + LikeClause.toString());
 			for(int i = 1; i <= publishers.length; ++i) {
 				String pubName = publishers[i-1];
 				ps.setString(i, "%"+pubName.trim()+"%");
@@ -117,7 +92,10 @@ public class PublisherDAO {
 				publisher.setWebsite(rs.getString(3));
 				pubs.add(publisher);
 			}
-			conn.close();
+			ps.close();
+			if(!keepOpen) {
+				this.dispose();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

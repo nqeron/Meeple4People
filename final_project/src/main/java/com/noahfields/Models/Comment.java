@@ -14,10 +14,10 @@ public class Comment {
 		super();
 	}
 
-	public Comment(int gameId, int userId, String comment_text, double rating, Date comment_date) {
+	public Comment(int gameId, int customerId, String comment_text, double rating, Date comment_date) {
 		super();
 		this.gameId = gameId;
-		this.customerId = userId;
+		this.customerId = customerId;
 		this.comment_text = comment_text;
 		this.rating = rating;
 		this.comment_date = comment_date;

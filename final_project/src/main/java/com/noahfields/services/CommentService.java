@@ -15,14 +15,17 @@ public class CommentService {
 	CommentDAO commentDao;
 
 	public List<Comment> getCommentsForGame(int id, int start) {
+		commentDao.connect();
 		return commentDao.getCommentsForGame(id, start);
 	}
 
 	public boolean customerHasCommentsForGame(int customerId, int gameId) {
+		commentDao.connect();
 		return commentDao.customerHasCommentsForGame(customerId, gameId);
 	}
 
 	public boolean addReviewForCustomerToGame(int customerId, int gameId, double ratingVal, String commentText) {
+		commentDao.connect();
 		return commentDao.addReviewForCustomerToGame(customerId, gameId, ratingVal, commentText);
 	}
 	

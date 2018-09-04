@@ -1,7 +1,7 @@
 /**
  * 
  */
-package core.DAO;
+package tests.DAO;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,6 +31,8 @@ class DesignerDAOTest {
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		designerDao = new DesignerDAO();
+		designerDao.setKeepOpen(true);
+		designerDao.connect();
 	}
 
 	/**
@@ -38,6 +40,7 @@ class DesignerDAOTest {
 	 */
 	@AfterAll
 	static void tearDownAfterClass() throws Exception {
+		designerDao.dispose();
 		designerDao = null;
 	}
 
@@ -46,7 +49,7 @@ class DesignerDAOTest {
 	 */
 	@Test
 	void testGetDesignersByNames() {
-		List<Designer> actual = designerDao.getDesignersByNames(new String[] { "Uwe", "Jamey Stegmaier" });
+		List<Designer> actual = designerDao.getDesignersByNames(new String[] { "Uw", "Jamey Stegmaier" });
 		List<Designer> expected = new ArrayList<Designer>();
 		expected.add(new Designer(1, "Uwe",	"Rosenberg", null));
 		expected.add(new Designer(4, "Jamey", "Stegmaier", "http://jameystegmaier.com/"));

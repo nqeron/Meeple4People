@@ -15,6 +15,7 @@ public class PublisherService {
 	PublisherDAO publisherDao;
 
 	public List<Publisher> getPublisherForGameID(int id) {
+		publisherDao.connect();
 		return publisherDao.getPublisherForGameID(id);
 	}
 	

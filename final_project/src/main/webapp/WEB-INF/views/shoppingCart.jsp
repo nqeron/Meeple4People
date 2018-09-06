@@ -46,5 +46,6 @@
 		<a href="/checkout/shipping">Checkout</a>
 	</div>
 </div>
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

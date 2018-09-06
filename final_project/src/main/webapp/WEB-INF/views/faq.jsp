@@ -29,5 +29,6 @@
 	<p> If none of these answer your question, you can e-mail us at <a href="mailto:support@meeple4people.com"> support@meeple4people.com</a>. 
 	</p>
 </div>
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

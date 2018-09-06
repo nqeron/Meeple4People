@@ -138,6 +138,6 @@
 </c:choose>
 
 <!-- <div> page: ${page}</div>  -->
-
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

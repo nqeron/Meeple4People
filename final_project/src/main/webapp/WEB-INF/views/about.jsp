@@ -22,5 +22,6 @@
 	 When you receive the game, play and enjoy. Then, when you're done, enjoy a free return of the game. Please note that you must have an account with us to be able to rent games. 
 	 This web site is still in development, so please feel free to contact us at <a href="mailto:support@meeple4people.com">support@meeple4people.com</a> for any needs or concerns.</p>
 </div>
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

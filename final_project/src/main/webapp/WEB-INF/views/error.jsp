@@ -22,6 +22,6 @@
 <br/>
 <br/>
 <div class="message">${message}</div>
-
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

@@ -70,5 +70,6 @@ Credit Card #: ${creditCard}
 	</div>
 	<div class="sum"> Total: ${totalSum}</div>
 </div>
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

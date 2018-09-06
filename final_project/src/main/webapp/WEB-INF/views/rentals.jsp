@@ -40,5 +40,6 @@
 	</div>
 	<div class="balance">Balance: ${customer.getBalanceText()}</div>
 </div>
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

@@ -22,5 +22,6 @@ ${error}
 	<input id="errorMessage" type="text" name="errorMessage">
 	<input type="button" onclick="doThis()"> 
 </form>
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

@@ -57,6 +57,11 @@ public class PublisherDAO extends GeneralDAO{
 		return publishers;
 	}
 
+	/**
+	 * getPublishersByName: gets Publishers by name -- looks for partial matches
+	 * @param publishers: array of strings with names for publisher
+	 * @return list of publishers with any of the provided names
+	 */
 	public List<Publisher> getPublishersByName(String[] publishers) {
 		if(publishers == null || publishers.length <=0 || Arrays.equals(publishers,new String[] {""})) {
 			return null;

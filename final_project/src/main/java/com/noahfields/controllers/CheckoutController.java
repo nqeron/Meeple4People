@@ -42,6 +42,12 @@ public class CheckoutController {
 	@Autowired
 	PictureService pictureService;
 	
+	/**
+	 * checkoutShipping: sends the user to the checkout Shipping page
+	 * @param m
+	 * @param request
+	 * @return 
+	 */
 	@GetMapping("/checkout/shipping")
 	public String checkoutShipping(Model m, HttpServletRequest request) {
 		
@@ -67,6 +73,7 @@ public class CheckoutController {
 		return "checkoutShipping";
 	}
 	
+	// checkoutBilling directs the customer to the billing page during checkout, processing all the shipping information into the request session
 	@PostMapping("/checkout/billing")
 	public String checkoutBilling(@RequestParam("firstname") String firstname, @RequestParam("lastname") String lastname, @RequestParam("state") String state,
 			 @RequestParam("city") String city, @RequestParam("address1") String address1, @RequestParam("address2") String address2,
@@ -118,6 +125,7 @@ public class CheckoutController {
 		return "checkoutBilling";
 	}
 	
+	//checkoutConfirmation sends the user to a final review page, after processing all the billing info into stored information
 	@PostMapping("/checkout/confirmation")
 	public String checkoutConfirmation(@RequestParam("fullname") String fullname, @RequestParam("state") String state,
 			 @RequestParam("city") String city, @RequestParam("address1") String address1, @RequestParam("address2") String address2,
@@ -203,6 +211,7 @@ public class CheckoutController {
 		return "checkoutReview";
 	}
 	
+	//createOrder places the order that is being checked out, then displaying the order confirmation page
 	@GetMapping("/checkout/createOrder")
 	public String createOrder(Model m, HttpServletRequest request){
 		Customer cust = (Customer) request.getSession().getAttribute("customer");

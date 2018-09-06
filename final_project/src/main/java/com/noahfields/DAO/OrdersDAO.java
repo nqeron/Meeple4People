@@ -21,6 +21,12 @@ public class OrdersDAO extends GeneralDAO{
 	private static final String GETGAMESFORORDER = "SELECT game.id, game.Name, game.Description, game.Year_Published, game.Cost_of_Game, game.Average_Rating FROM Games game"
 			+ " JOIN Stock item on game.id = item.Game_ID JOIN Orders ord on item.Item_ID = ord.Item_ID WHERE ord.Order_ID = ?";
 
+	/**
+	 * addItemsToOrderForCustomer: adds a bunch of stock items to a customer's order
+	 * @param rentalsItems: items to add
+	 * @param customerID: customer to add for
+	 * @return: generated orderId
+	 */
 	public int addItemsToOrderForCustomer(List<StockItem> rentalsItems, int customerID) {
 		
 		if(conn == null) {
@@ -67,6 +73,11 @@ public class OrdersDAO extends GeneralDAO{
 		return id;
 	}
 
+	/**
+	 * getGamesForOrder: get the games in a given order
+	 * @param orderID: id of the order
+	 * @return: list of games for a given order
+	 */
 	public List<Game> getGamesForOrder(int orderID){
 		
 		if(conn == null) {

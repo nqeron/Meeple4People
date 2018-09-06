@@ -32,6 +32,11 @@ public class ShoppingCartDAO extends GeneralDAO{
 	private static final String UPDATERENTALITEMSTATUSTOINSTOCK = "UPDATE Stock SET Status_ID = 1 WHERE Item_ID = (SELECT Item_ID From Rentals Where id = ?)"; //TODO Maybe should be EnRoute (2) and push off setting to 1 when confirmed in stock, but whatever 
 	private static final String GETNUMITEMSINCARTFORCUSTOMER = "SELECT Count(Item_ID) FROM Shopping_Cart WHERE Customer_ID = ?";
 	
+	/**
+	 * getItemsInCartForCustomer: gets all the items that a customer has in their shopping cart
+	 * @param customer_id: id of the customer
+	 * @return list of items in a customer's shopping cart
+	 */
 	public List<StockItem> getItemsInCartForCustomer(int customer_id){
 		
 		if(conn == null) {
@@ -70,6 +75,11 @@ public class ShoppingCartDAO extends GeneralDAO{
 		return stockItems;
 	}
 
+	/**
+	 * getGameForItem: gets the game for a particular item
+	 * @param item_id: id of the item
+	 * @return Game details for the given item
+	 */
 	public Game getGameForItem(int item_id) {
 		
 		if(conn == null) {
@@ -104,6 +114,12 @@ public class ShoppingCartDAO extends GeneralDAO{
 		return game;
 	}
 
+	/**
+	 * addItemToShoppingCartForCustomer: adds an item into the shopping cart for a customer
+	 * @param item_id: id of the item to add
+	 * @param customer_id: id of the customer to add for
+	 * @return whether or not the item was added
+	 */
 	public boolean addItemToShoppingCartForCustomer(int item_id, int customer_id) {
 		
 		if(conn == null) {
@@ -140,6 +156,11 @@ public class ShoppingCartDAO extends GeneralDAO{
 		return added;
 	}
 
+	/**
+	 * getNextAvailableStockItemForGame: finds the next available item in stock for a particular game (not in a shopping cart and In Stock)
+	 * @param game_id: id of game to find item for
+	 * @return: StockItem found
+	 */
 	public StockItem getNextAvailableStockItemForGame(int game_id) {
 		
 		if(conn == null) {
@@ -175,6 +196,12 @@ public class ShoppingCartDAO extends GeneralDAO{
 		return stockItem;
 	}
 
+	/**
+	 * removeItemFromShoppingCart: removes an item from a customer's shopping cart
+	 * @param itemId: item to remove from the shopping cart
+	 * @param customerId: customer to remove item for
+	 * @return whether or not the item was removed
+	 */
 	public boolean removeItemFromShoppingCart(int itemId, int customerId) {
 		
 		if(conn == null) {
@@ -207,6 +234,11 @@ public class ShoppingCartDAO extends GeneralDAO{
 
 	
 
+	/**
+	 * updateItemsInStockToRented: sets the given items to have the Rented (3) status
+	 * @param rentalsItems: items to change state
+	 * @return whether or not the items were updated
+	 */
 	public boolean updateItemsInStockToRented(List<StockItem> rentalsItems) {
 		
 		if(conn == null) {
@@ -241,6 +273,12 @@ public class ShoppingCartDAO extends GeneralDAO{
 		return updated;
 	}
 
+	/**
+	 * removeItemsFromShoppingCart: removes multiple items from the shopping cart for a given user (used when transferring to Rentals table)
+	 * @param rentalsItems: items to remove
+	 * @param customerID: customer to remove for
+	 * @return whether or not the items were removed
+	 */
 	public boolean removeItemsFromShoppingCart(List<StockItem> rentalsItems, int customerID) {
 		
 		if(conn == null) {
@@ -276,6 +314,11 @@ public class ShoppingCartDAO extends GeneralDAO{
 		return removed;
 	}
 
+	/**
+	 * updateRentalItemsToInStock: updates items from a particular rental to be In stock (status 1)
+	 * @param rentalId: rental id of item
+	 * @return whether or not the status was changed
+	 */
 	public boolean updateRentalItemsToInStock(int rentalId) {
 		
 		if(conn == null) {
@@ -305,6 +348,11 @@ public class ShoppingCartDAO extends GeneralDAO{
 		return updated;
 	}
 
+	/**
+	 * getNumItemsInCartForCustomer: gets the number of items the customer has in their cart
+	 * @param id: customer id
+	 * @return number of items in customer's cart
+	 */
 	public int getNumItemsInCartForCustomer(int id) {
 		
 		if(conn == null) {

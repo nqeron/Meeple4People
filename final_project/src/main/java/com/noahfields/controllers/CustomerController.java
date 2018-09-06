@@ -33,11 +33,13 @@ public class CustomerController {
 	@Autowired
 	ZipcodeService zipcodeService;
 	
+	// goToRegister sends the user to the sign up page
 	@GetMapping("/register")
 	public String goToRegister() {
 		return "signUp";
 	}
 	
+	// register takes the user sign up details and saves them to the database as a new customer. Will prevent duplicate usernames or emails.
 	@PostMapping("/registerAction")
 	public String register(@RequestParam("username") String username, @RequestParam("email") String email, @RequestParam("inputPassword") String password, Model m, HttpServletRequest request) {
 		Customer customer = customerService.getCustomerByUsername(username);
@@ -75,7 +77,7 @@ public class CustomerController {
 		return userProfileMain(m, request);
 	}
 
-	
+	//userProfileMain builds the user profile page
 	@GetMapping("/userProfile")
 	public String userProfileMain(Model m, HttpServletRequest request) {
 		Customer customer = (Customer) request.getSession().getAttribute("customer");
@@ -95,11 +97,13 @@ public class CustomerController {
 		return "userProfile";
 	}
 	
+	// goToLoginPage sends the user to the login page
 	@GetMapping("/login")
 	public String goToLoginPage() {
 		return "login";
 	}
 	
+	// logout logs the user out of the current page and either sends them to the previous page if possible or to the login page
 	@GetMapping("/logout")
 	public RedirectView logout(ModelAndView m, HttpServletRequest request) {
 		//ModelAndView m = new ModelAndView();
@@ -112,6 +116,7 @@ public class CustomerController {
 		return new RedirectView(referer);
 	}
 	
+	// login handles the user login info, verifying user credentials and saving the customer to the request session
 	@PostMapping("/loginAction")
 	public String login(@RequestParam("username") String username, @RequestParam("inputPassword") String password, Model m, HttpServletRequest request) {
 		
@@ -132,6 +137,7 @@ public class CustomerController {
 		return userProfileMain(m, request);
 	}
 
+	// updateUser handles information from the User Profile form, compiling them into the user's data and updating the database
 	@PostMapping("/updateUser")
 	public String updateUser(@RequestParam("firstname") String firstname, @RequestParam("lastname") String lastname, @RequestParam("state") String state,
 							 @RequestParam("city") String city, @RequestParam("address1") String address1, @RequestParam("address2") String address2,

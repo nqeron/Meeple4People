@@ -24,6 +24,19 @@ public class GameDAO extends GeneralDAO {
 	private static final String GETGAMESBYNAME = "SELECT * FROM Games WHERE Name LIKE ?";
 	private static final String GETNUMGAMES = "SELECT Count(id) FROM Games";
 	
+	/**
+	 * searchForGames: searches the database for games, ordered by rating (descending)
+	 * @param name: name of the game to search for -- looks for partial matches
+	 * @param years: list of years to match on
+	 * @param lowCost: lower bound for the cost of the game
+	 * @param highCost: upper bound for the cost of the game
+	 * @param lowRating: lower bound for the rating of the game
+	 * @param highRating: upper bound for the rating of the game
+	 * @param designers: list of designers to search for
+	 * @param mechanics: list of mechanics to search for
+	 * @param publishers: list of publishers to search for
+	 * @return list of games found
+	 */
 	public List<Game> searchForGames(String name, int[] years, double lowCost, double highCost, double lowRating, double highRating, List<Designer> designers, List<Mechanic> mechanics, List<Publisher> publishers ){
 		
 		if(conn == null) {
@@ -58,6 +71,21 @@ public class GameDAO extends GeneralDAO {
 	
 	
 
+	/**
+	 * searchForGamesSQL: generates SQL and prepares statement for query
+	 * @param conn: sql connection
+	 * @param name: name of the game to search for -- looks for partial matches
+	 * @param years: list of years to match on
+	 * @param lowCost: lower bound for the cost of the game
+	 * @param highCost: upper bound for the cost of the game
+	 * @param lowRating: lower bound for the rating of the game
+	 * @param highRating: upper bound for the rating of the game
+	 * @param designers: list of designers to search for
+	 * @param mechanics: list of mechanics to search for
+	 * @param publishers: list of publishers to search for
+	 * @return prepared statement for search query
+	 * @throws SQLException
+	 */
 	private PreparedStatement searchForGamesSQL(Connection conn, String name, int[] years, double lowCost, double highCost,  double lowRating, double highRating, List<Designer> designers, List<Mechanic> mechanics, List<Publisher> publishers ) throws SQLException{
 		String SQLBase = "SELECT game.id, game.Name, game.Description, game.Year_Published, game.Cost_of_Game, game.Average_Rating FROM Games game ";
 		
@@ -211,6 +239,11 @@ public class GameDAO extends GeneralDAO {
 		return ps;
 	}
 
+	/**
+	 * getRecommendedGames: get a list of six games, sorted by rating (descending)
+	 * @param start: index to start at
+	 * @return list of six games, sorted by rating, starting at start index
+	 */
 	public List<Game> getRecommendedGames(int start){
 		
 		if(conn == null) {
@@ -249,6 +282,11 @@ public class GameDAO extends GeneralDAO {
 
 
 
+	/**
+	 * getGameByID: gets a particular game by id
+	 * @param id: id of the game
+	 * @return Game for the corresponding id
+	 */
 	public Game getGameByID(int id) {
 		
 		if(conn == null) {
@@ -281,6 +319,10 @@ public class GameDAO extends GeneralDAO {
 		return game;
 	}
 
+	/**
+	 * getNumGames: gets the number of games in the database
+	 * @return the number of games in the db
+	 */
 	public int getNumGames() {
 		
 		if(conn == null) {

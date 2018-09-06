@@ -31,6 +31,12 @@ public class RentalsDAO extends GeneralDAO{
 			+ " JOIN Rentals rental on item.Item_ID = rental.Item_ID WHERE rental.id = ?";
 	private static final String GETNUMITEMSRENTEDFORCUSTOMER = "SELECT Count(Item_ID) FROM Rentals WHERE Customer_ID = ?";
 
+	/**
+	 * addItemsToRentalsForCustomer: add items to the Rentals table for a customer
+	 * @param rentalsItems: items to add
+	 * @param customerID: id of the customer
+	 * @return whether or not the items were added
+	 */
 	public boolean addItemsToRentalsForCustomer(List<StockItem> rentalsItems, int customerID) {
 		
 		if(conn == null) {
@@ -73,6 +79,11 @@ public class RentalsDAO extends GeneralDAO{
 		return added;
 	}
 
+	/**
+	 * getGamesRentedForCustomer: gets all the games rented by a customer
+	 * @param customerID: id of the customer
+	 * @return mapping between the games rented and the rental details
+	 */
 	public Map<Game, Rental> getGamesRentedForCustomer(int customerID){
 		
 		if(conn == null) {
@@ -114,6 +125,11 @@ public class RentalsDAO extends GeneralDAO{
 		return gamesRented;
 	}
 
+	/**
+	 * removeRental: removes a rental from the database
+	 * @param rentalId: rental to remove
+	 * @return whether or not the rental was removed
+	 */
 	public boolean removeRental(int rentalId) {
 		
 		if(conn == null) {
@@ -143,6 +159,11 @@ public class RentalsDAO extends GeneralDAO{
 		return removed;
 	}
 
+	/**
+	 * getGameFromRental: gets the game for a particular rental
+	 * @param rentalId: id of the rental
+	 * @return Game information for the particular rental
+	 */
 	public Game getGameFromRental(int rentalId) {
 		
 		if(conn == null) {
@@ -178,6 +199,11 @@ public class RentalsDAO extends GeneralDAO{
 		return game;
 	}
 
+	/**
+	 * getNumItemsRentedForCustomer: gets the number of items a customer has rented
+	 * @param id: id of the customer
+	 * @return number of games the customer has rented
+	 */
 	public int getNumItemsRentedForCustomer(int id) {
 		
 		if(conn == null) {

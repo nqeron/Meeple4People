@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import org.springframework.stereotype.Repository;
 
+//Provides general functionality for DAOs to roll them back, if needed
 @Repository
 abstract public class GeneralDAO {
 	protected Connection conn;
@@ -27,6 +28,9 @@ abstract public class GeneralDAO {
 		this.keepOpen = keepOpen;
 	}
 	
+	/**
+	 * connect: connects the DAO to the Database
+	 */
 	public void connect() {
 		try {
 			conn = new OracleConnection().getConnection();
@@ -43,6 +47,9 @@ abstract public class GeneralDAO {
 		}
 	}
 
+	/**
+	 * rollback: rolls the current state back
+	 */
 	public void rollback() {
 		if (!this.autocommit) {
 			if(conn != null) {
@@ -56,6 +63,9 @@ abstract public class GeneralDAO {
 		}
 	}
 	
+	/**
+	 * commit: commits the current state
+	 */
 	public void commit() {
 		try {
 			conn.commit();
@@ -65,6 +75,9 @@ abstract public class GeneralDAO {
 		}
 	}
 	
+	/**
+	 * dispose: closes the connection
+	 */
 	public void dispose() {
 		if (conn != null) {
 			try {

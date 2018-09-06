@@ -16,6 +16,7 @@ public class ZipcodeController {
 	@Autowired
 	ZipcodeService zipcodeService;
 	
+	// getZipcode handles Ajax request for information about a given zipcode
 	@PostMapping("/getZipcode")
 	public Response getZipcode(@RequestBody Zipcode zip){
 		zip = zipcodeService.getZipcode(zip.getZipcode());

@@ -18,6 +18,11 @@ public class ZipcodeDAO extends GeneralDAO{
 	private static final String GETZIPCODE = "SELECT * FROM Zipcodes WHERE Zipcode = ?";
 	private static final String GETALLZIPS = "SELECT * FROM Zipcodes";
 	
+	/**
+	 * getZipcode: get the details for a particular zipcode
+	 * @param zip: zipcode to lookup
+	 * @return Zipcode details
+	 */
 	public Zipcode getZipcode(int zip) {
 		if(conn == null) {
 			return null;
@@ -48,6 +53,10 @@ public class ZipcodeDAO extends GeneralDAO{
 		return zipcode;
 	}
 
+	/**
+	 * getAllZips: gets all the zipcodes in the database
+	 * @return list of all zipcodes and details
+	 */
 	public List<Zipcode> getAllZips() {
 		
 		if(conn == null) {

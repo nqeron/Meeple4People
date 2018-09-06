@@ -44,11 +44,14 @@ public class SearchController {
 	@Autowired
 	PictureService pictureService;
 	
+	// browseAllGames just redirects to a search for everything
 	@GetMapping("/browseGames")
 	public String browseAllGames(Model m) {
 		return searchFor("",1,m);
 	}
 	
+	// searchFor searches the database given a specific search string. The search string can have keyword values. (e.g. "designers: uwe, stone; mechanics: set collection")
+	// page is currently unused, but was intended to be used to display only a subset of the games, based on the page number
 	@GetMapping("/search")
 	public String searchFor(@RequestParam("searchString") String search, @RequestParam("page") int page, Model m) {
 		String[] valuePairs = search.split(";\\s?");

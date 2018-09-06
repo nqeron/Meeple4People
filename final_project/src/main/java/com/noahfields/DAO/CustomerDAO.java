@@ -246,6 +246,11 @@ public class CustomerDAO extends GeneralDAO{
 	}
 
 
+	/**
+	 * getCustomerByEmail: gets a customer by email address
+	 * @param email: email to search for
+	 * @return Customer for the given email
+	 */
 	public Customer getCustomerByEmail(String email) {
 		
 		if(conn == null) {

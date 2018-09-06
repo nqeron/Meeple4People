@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class TestController {
 
+	// welcome: easter egg - a test page
 	@GetMapping("/welcome")
 	public String welcome(Model m) {
 		

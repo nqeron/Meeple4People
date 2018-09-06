@@ -19,6 +19,12 @@ public class PictureDAO extends GeneralDAO{
 	
 	private static final String SELECTPICTUREBYSIZEANDGAME = "SELECT * FROM Game_Pictures WHERE Picture_Size = ? AND Game_ID=?";
 
+	/**
+	 * getPictureOfSizeForGame: gets pictures of a given size for a game
+	 * @param size: size to request
+	 * @param gameId: id of game to request
+	 * @return picture of given size for the game
+	 */
 	public Picture getPictureOfSizeForGame(int size, int gameId) {
 		
 		if(conn == null) {

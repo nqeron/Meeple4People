@@ -23,6 +23,7 @@ public class OrdersController {
 	@Autowired
 	PictureService pictureService;
 	
+	// getOrder generates a page for the given order, displaying the relevant games
 	@GetMapping("/orders/{id}")
 	public String getOrder(@PathVariable int id, Model m) {
 		

@@ -33,6 +33,7 @@ public class ShoppingCartController {
 	@Autowired
 	PictureService pictureService;
 	
+	// addGameToShoppingCart adds a particular game and saves it to the customer's shopping cart
 	@PostMapping("addGameToShoppingCart")
 	public RedirectView addGameToShoppingCart(@RequestParam("gameId") int gameId, Model m, HttpServletRequest request, RedirectAttributes redir) {
 		Customer cust = (Customer) request.getSession().getAttribute("customer");
@@ -67,6 +68,7 @@ public class ShoppingCartController {
 		return new RedirectView("/shoppingCart");
 	}
 	
+	// getShoppingCart generates the page that lists the user's games in their shopping cart
 	@GetMapping("/shoppingCart")
 	public String getShoppingCart(Model m, HttpServletRequest request) {
 		Customer cust = (Customer) request.getSession().getAttribute("customer");
@@ -95,6 +97,7 @@ public class ShoppingCartController {
 		return "shoppingCart";
 	}
 	
+	// removeItemFromShoppingCart handles a request to remove a particular item from the user's shopping cart
 	@PostMapping("/removeItemFromShoppingCart")
 	public String removeItemFromShoppingCart(@RequestParam("itemId") int itemId, Model m, HttpServletRequest request) {
 		Customer cust = (Customer) request.getSession().getAttribute("customer");

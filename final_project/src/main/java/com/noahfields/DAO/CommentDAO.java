@@ -27,6 +27,12 @@ public class CommentDAO extends GeneralDAO{
 	}
 	
 	
+	/**
+	 * getCommentsForGame: get the comments for a particular game
+	 * @param id: id of game to get comments for
+	 * @param start: comment # to start from
+	 * @return list of comments for game, sorted by rating (descending)
+	 */
 	public List<Comment> getCommentsForGame(int id, int start){
 		
 		if(conn == null) {
@@ -65,6 +71,12 @@ public class CommentDAO extends GeneralDAO{
 		return comments;
 	}
 
+	/**
+	 * customerHasCommentsForGame: says whether or not a user already has a comment for a given game
+	 * @param customerId: id of the customer to check
+	 * @param gameId: id of the game to check
+	 * @return true if the customer has a comment for that game, otherwise false
+	 */
 	public boolean customerHasCommentsForGame(int customerId, int gameId) {
 		
 		if(conn == null) {
@@ -95,6 +107,14 @@ public class CommentDAO extends GeneralDAO{
 		return hasComment;
 	}
 
+	/**
+	 * addReviewForCustomerToGame: saves a customer's review of a particular game 
+	 * @param customerId: customer who commented
+	 * @param gameId: game reviewed
+	 * @param ratingVal: double value for the rating
+	 * @param commentText: text of the comment
+	 * @return whether or not the comment was saved
+	 */
 	public boolean addReviewForCustomerToGame(int customerId, int gameId, double ratingVal, String commentText) {
 		
 		if(conn == null) {
@@ -131,6 +151,12 @@ public class CommentDAO extends GeneralDAO{
 	}
 
 
+	/**
+	 * getCommentByCustomerAndGame: gets a particular comment
+	 * @param customerId: customer to get comment for
+	 * @param gameId: game to get comment for
+	 * @return Comment by a customer for a game
+	 */
 	public Comment getCommentByCustomerAndGame(int customerId, int gameId) {
 		
 		if(conn == null) {

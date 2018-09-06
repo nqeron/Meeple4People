@@ -36,6 +36,7 @@ public class RentalsController {
 	@Autowired
 	PictureService pictureService;
 	
+	// getRentals generates a page to display the customer's current rentals
 	@GetMapping("/rentals")
 	public String getRentals(Model m, HttpServletRequest request) {
 		
@@ -56,6 +57,7 @@ public class RentalsController {
 		return "rentals";
 	}
 	
+	// returnGame handles a request to return a rental, and returns it for the customer, then sending them to a page to review the game - if they haven't already
 	@PostMapping("/returnGame")
 	public String returnGame(@RequestParam("rentalId") int rentalId, Model m, HttpServletRequest request) {
 		
@@ -85,6 +87,7 @@ public class RentalsController {
 		return getRentals(m, request);
 	}
 	
+	// addReviewToGame handles a request to review a game, saving the comment and rating number to the database
 	@PostMapping("/addReviewToGame")
 	public String addReviewToGame(@RequestParam("gameId") int gameId, @RequestParam("ratingVal") double ratingVal, @RequestParam("commentText") String commentText, Model m, HttpServletRequest request) {
 		

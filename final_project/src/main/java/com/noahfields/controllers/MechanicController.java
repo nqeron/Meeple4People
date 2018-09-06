@@ -17,6 +17,7 @@ public class MechanicController {
 	@Autowired
 	MechanicService mechanicService;
 	
+	// getMechanicDetails generates a detail page for the given mechanic
 	@GetMapping("mechanics/{id}")
 	public String getMechanicDetails(@PathVariable int id, Model m) throws NoMechanicFoundException {
 		Mechanic mechanic = mechanicService.getMechanicByID(id);

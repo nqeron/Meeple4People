@@ -44,6 +44,11 @@ public class SearchController {
 	@Autowired
 	PictureService pictureService;
 	
+	@GetMapping("/browseGames")
+	public String browseAllGames(Model m) {
+		return searchFor("",1,m);
+	}
+	
 	@GetMapping("/search")
 	public String searchFor(@RequestParam("searchString") String search, @RequestParam("page") int page, Model m) {
 		String[] valuePairs = search.split(";\\s?");

@@ -4,7 +4,7 @@ This is my final Project for PerScholas. The aim is to implement a web site wher
 ## Installation
 
 Oracle 12.2 - download the m4pexport and install into your directory. Run this.
-Java 1.8 - download the war
+Java 1.8 - download the war, extract war (zip) modify WEB-INF\classes\db.propreties to align with your databases details (username and password)
 
 ## Technologies
 

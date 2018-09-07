@@ -1,4 +1,4 @@
-#Meeple4People
+# Meeple4People
 
 This is my final Project for PerScholas. The aim is to implement a web site where users can sign up and rent board games.
 ## Installation

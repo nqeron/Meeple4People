@@ -60,7 +60,9 @@ public class CustomerController {
 		customer.setE_mail(email);
 		customer.setUsername(username);
 		customer.setMember_status("Active");
-		Date date = new java.sql.Date( Calendar.getInstance().getTime().getTime() );
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.MILLISECOND, 0);
+		Date date = new java.sql.Date(cal.getTime().getTime());
 		customer.setJoin_date(date);
 		customer.setBalance(0);
 		
@@ -110,7 +112,7 @@ public class CustomerController {
 		
 		request.getSession().setAttribute("customer", null);
 		String referer = request.getHeader("Referer");
-		if(referer.endsWith("loginAction") || referer.endsWith("updateUser") || referer.endsWith("registerAction") || referer.endsWith("removeItemFromShoppingCart")) {
+		if(referer.endsWith("loginAction") || referer.endsWith("updateUser") || referer.endsWith("registerAction") || referer.endsWith("removeItemFromShoppingCart") || referer.endsWith("returnGame")) {
 			referer = "/login";
 		}
 		return new RedirectView(referer);
@@ -181,7 +183,7 @@ public class CustomerController {
 		}
 		
 		Customer custEmail = customerService.getCustomerByEmail(email);
-		if(custEmail != null && !cust.equals(custEmail)) {
+		if(custEmail != null && !cust.equals(custEmail)) { 
 			m.addAttribute("error", "That email is already taken! cust: " + cust + " custEmai: "+ custEmail);
 			return userProfileMain(m, request);
 		}
@@ -206,6 +208,7 @@ public class CustomerController {
 		}
 		
 		request.getSession().setAttribute("customer", cust);
+		m.addAttribute("error", "Successfully Updated information!");
 		return userProfileMain(m, request);
 	}
 	

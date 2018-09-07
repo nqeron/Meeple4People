@@ -24,6 +24,7 @@ public class RentalsService {
 	ShoppingCartDAO shCartDAO;
 	
 	public Map<Game, Rental> getGamesRentedForCustomer(int customerID){
+		rentalsDAO.connect();
 		return rentalsDAO.getGamesRentedForCustomer(customerID);
 	}
 
@@ -65,6 +66,7 @@ public class RentalsService {
 	}
 
 	public Game getGameFromRental(int rentalId) {
+		rentalsDAO.connect();
 		return rentalsDAO.getGameFromRental(rentalId);
 	}
 	
